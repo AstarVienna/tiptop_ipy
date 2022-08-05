@@ -23,7 +23,7 @@ The astropy.io.fits.HDUList is held in the ``.hdulist`` property
 
     >>> eris.hdulist
 
-Query the TIPTOP server directly with the raw string from an existing ``.ini`` config file
+Alternatively, we can query the TIPTOP server directly with the raw string from an existing ``.ini`` config file
 
     >>> eris_path = tiptop_ipy.list_instruments(include_path=True)[1]
     >>> with open(eris_path) as f:
