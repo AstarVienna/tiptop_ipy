@@ -2,7 +2,7 @@
 
 A wrapper for the ESO TIPTOP microservice
 
-    $ pip install tiptop_ipy
+    $ pip install git+https://github.com/astronomyk/tiptop_ipy.git
 
 ## Basic Usage
 
