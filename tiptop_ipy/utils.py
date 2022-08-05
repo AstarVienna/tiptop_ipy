@@ -1,3 +1,4 @@
+import os
 import os.path as p
 from tempfile import TemporaryFile
 
@@ -8,8 +9,20 @@ from astropy.io import fits
 
 
 with open(p.join(p.dirname(__file__), "defaults.yaml")) as f:
-    DEFAULTS_RAW = f.read()
-    DEFAULTS_YAML = yaml.full_load(DEFAULTS_RAW)
+    DEFAULTS = f.read()
+    DEFAULTS_YAML = yaml.full_load(DEFAULTS)
+
+
+def list_instruments(include_path=False):
+    dname = p.join(p.dirname(__file__), "instrument_templates")
+    yamls = [fname for fname in os.listdir(dname) if ".yaml" in fname]
+    inis = [fname for fname in os.listdir(dname) if ".ini" in fname]
+    fnames = yamls + inis
+
+    if include_path:
+        fnames = [p.join(dname, fname) for fname in fnames]
+
+    return fnames
 
 
 def make_ini_from_yaml(config_dict: dict) -> str:
@@ -35,14 +48,15 @@ def make_yaml_from_ini(ini_contents: str) -> dict:
                 curr_cat = line[1:-1]
                 yaml_dict[curr_cat] = {}
             else:
-                line = line.replace("=", ":")
+                line = line.replace("=", ":").replace("None", "!!null None")
                 dic = yaml.full_load(line)
+
                 yaml_dict[curr_cat].update(dic)
 
     return yaml_dict
 
 
-def get_tiptop_psf(ini_content: str) -> fits.HDUList:
+def query_tiptop_server(ini_content: str) -> fits.HDUList:
     """
     Returns a cube of PSFs for N on-sky positions relative to the optical axis
 
@@ -77,12 +91,18 @@ def get_tiptop_psf(ini_content: str) -> fits.HDUList:
             raise ValueError("Config file cannot be parsed by server :(")
 
         with TemporaryFile(mode="w+b") as tmp:
+            found_fits_file = False
             for part in payload.parts:
                 if part.headers.get(b'Content-Type') == b'application/octet-stream' and \
                         "tiptop_ipy.fits" in part.headers.get(b'Content-Disposition').decode():
                     tmp.write(part.content)
                     hdus = fits.open(tmp, mode="update", lazy_load_hdus=False)
                     _ = [hdu.data for hdu in hdus]          # force loading of data into RAM
+                    found_fits_file = True
+
+            if found_fits_file is False:
+                raise ValueError("TIPTOP did not create a FITS file. "
+                                 "Something is bung with the config file.")
 
     else:
         raise ValueError(f"TIPTOP server returned error: {response.status_code}")

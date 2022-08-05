@@ -17,7 +17,7 @@ class TestDefaults:
         assert all([isinstance(utils.DEFAULTS_YAML[cat], dict) for cat in cats])
 
     def test_defaults_raw_is_string(self):
-        assert isinstance(utils.DEFAULTS_RAW, str)
+        assert isinstance(utils.DEFAULTS, str)
 
 
 class TestMakeIniFromYaml:
@@ -54,9 +54,14 @@ class TestGetTipTopPSF:
         with open(fname) as f:
             ini_content = f.read()
 
-        hdulist = utils.get_tiptop_psf(ini_content=ini_content)
+        hdulist = utils.query_tiptop_server(ini_content=ini_content)
 
         assert isinstance(hdulist, fits.HDUList)
         assert len(hdulist) == 3
         assert hdulist[1].header["NAXIS1"] == 256
 
+
+class TestListInstruments:
+    def test_returns_list_of_instruments(self):
+        files = utils.list_instruments()
+        assert "eris.ini" in files
