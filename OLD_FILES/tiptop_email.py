@@ -13,7 +13,7 @@ def get_tiptop_psf(ini_content):
         ini_stream.seek(0)
 
         url = f'http://dmogpu1.hq.eso.org:9999/p2services/eris/tiptop'
-        desc_file = 'instrument_templates/serviceDescription.json'
+        desc_file = '../tiptop_ipy/instrument_templates/serviceDescription.json'
         files = {'serviceDescription': (desc_file, open(desc_file, 'rb'), 'application/json'),
                  'parameterFile': ("eris.ini", ini_stream, 'text/plain')}
         response = requests.post(url, files=files)
