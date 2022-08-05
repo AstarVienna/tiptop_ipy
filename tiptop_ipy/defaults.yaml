@@ -1,0 +1,242 @@
+# Note: In order for scientific notation to be parsed by yaml, it needs a decimal point AND a +/- in the exponent
+#       E.g. 1.e+1
+
+atmosphere:
+  description : |
+    The atmosphere section contains the turbulence profile and basic parameters
+
+  required_keywords: [Seeing]
+
+  # Required
+  Seeing : 0.8              # [arcsec] Seeing at Zenith
+
+  # optional
+  Wavelength : 500.e-9      # [m] wavelength of definition of atmosphere statistics (e.g. for Seeing)
+  r0_Value: 0               # [m] Fried Parameter
+  L0 : 25.0                 # [m] Outer scale
+  Cn2Heights : [0.]         # [m] altitude of turbulence layers
+  Cn2Weights : [1.]         # [0..1] Relative contribution of each layer (sum=1)
+  WindDirection : [0.]      # [deg] wind direction for each layer
+  WindSpeed : [0.]          # [m s-1] wind speed values for each layer
+  testWindspeed: 0          # [m s-1] if 0 it computes the weighted average windspeed from the layers
+
+
+telescope:
+  description : | 
+    The telescope section provides the primary pupil description of the optical system 
+
+  required_keywords: [TelescopeDiameter, ObscurationRatio, Resolution]
+
+  # Required
+  TelescopeDiameter : 0.        # [m] : Telescope diameter
+  ObscurationRatio : 0.         # [0..1] : pupil obstruction fraction of primary mirror due to the secondary mirror
+  Resolution : 0                # int : Number of pixels across the pupil diameter
+
+  # Optional
+  ZenithAngle : 0.              # [deg] telescope zenith angle
+  TechnicalFoV : ""             # [arcsec?] : size of the technical field of view
+  PathPupil : ""                # path to the pupil model in .fits file
+  PathStaticOn: ""              # [nm] : path to a map of static aberrations (nm) in .fits file
+  PathStaticOff: ""             # ??
+  PathStaticPos: ""             # ??
+  PathApodizer: ""              # path to a model of amplitude apodizaton of the electric field in the pupil in .fits file
+  PathStatModes: ""             # path to a model of a basis of modes to describe addtionnal static aberrations
+  coeficientOfTheStaticMode: "" # ??
+
+
+sources_science:
+  description : | 
+    The sources_science section determines how many PSFs are produced for what wavelength and where: 
+    
+    Notes
+    -----
+    - N PSFs are produced based on N = (Wave * Zen * Az)
+    - For each wavelength a new FITS ImageHDU cube is appended to the returned HDUList
+    - For each (Zenith, Azimuth) value pair a new layer is added to each cube
+    - The position of the off-axis PSFs is given in polar coordinates (why?)
+    - The returned PSF HDUList contains an additional (N, 2) ImageHDU with the cartesian coordinates of the off-axis PSFs 
+  
+    Examples
+    --------
+    6 PSFs in 3 ImageHDU cubes (JHK filters), each with an on- and off-axis position
+    
+        Wavelength : [ 1.2e-6, 1.6e-6, 2.15e-6 ]    # [m]
+        Zenith : [ 0, 10 ]                          # [arcsec] : radius 
+        Azimuth : [ 0, 180 ]                        # [deg] : angle from up
+
+  required_keywords: [ Wavelength, Zenith, Azimuth ]
+
+  # Required
+  Wavelength : []          # [m] : list of central wavelengths for returned cube of PSFs. Yes, in units of metres!
+  Zenith : []              # [arcsec] : radius from FOV centre
+  Azimuth : []             # [deg] : clockwise rotation around FOV centre
+
+
+sources_HO:
+  description : |
+    High-order source parameters. See description of sources_science
+
+  required_keywords: [ Wavelength, Zenith, Azimuth ]
+
+  # Required
+  Wavelength : []          # [m] :
+  Zenith : []              # [arcsec] : radius from FOV centre
+  Azimuth : []             # [deg] : rotation around FOV centre
+
+  # Optional
+  Height : 0               # [m] : Height of guide stars. 0 : inf
+
+
+sources_LO:
+  description : |
+    Low-order source parameters. See description of sources_science
+
+  required_keywords: [ Wavelength, Zenith, Azimuth ]
+  # N PSFs are produced based on N = (wave * Zen * Az)
+
+  # Required
+  Wavelength : []          # [m] :
+  Zenith : []              # [arcsec] : radius from FOV centre
+  Azimuth : []             # [deg] : rotation around FOV centre
+
+  # Optional
+  Height : 0               # [m] : Height of guide stars. 0 : inf
+
+
+sensor_science:
+  description: |
+    The sensor_science section defines the image characteristics of the returned PSFs
+
+    Notes
+    -----
+    - Transmission and Dispersion within the filter bandpass can be added by using the lists keywords.
+    - Transmission and Dispersion values must be evenly spaced on a specific given wavelength grid (see next point)
+    - The wavelengths are setup as a linear grid from 
+      (ScienceWavelength - SpectralBandwidth) to (ScienceWavelength + SpectralBandwidth) with a number of bins 
+      defined from the length of the Transmittance field
+
+  required_keywords: [ PixelScale, FieldOfView ]
+  # Required
+  PixelScale : 0      # [mas] : pixel scale of instrument detector
+  FieldOfView : 0     # int : Pixel dimensions of returned PSFs
+
+  # Optional
+  Binning : 1                   # int : Sensor binning factor
+  SpotFWHM: [[0.0,0.0,0.0]]     # [mas] : HO spot scale. Proper description is missing ??
+  SpectralBandwidth: 0.         # [m] : Half-width of filter
+  Transmittance : [1.0]         # [0..1] : Transmittance at the considered wavelengths. See sensor_science description
+  Dispersion: [[0.0], [0.0]]    # [units ??] : Dispersion x/y at the considered wavelength in pixel. Must be the same size than Transmittance
+  SigmaRON : 0.0                # [e-]
+  Dark: 0.                      # [e-/s/pix]
+  SkyBackground: 0.             # [e-/s/pix]
+  Gain: 1.                      # [ADU/e-]
+  ExcessNoiseFactor : 1.0       # extra noise multiplication factor
+  NoiseVariance : [None]        # Noise Variance in rd^2. If not empty, this value overwrites the analytical noise variance calculation
+
+
+sensor_HO:
+  description: |
+    High-order wavefront sensor parameters
+
+  required_keywords: [ PixelScale, FieldOfView, NumberLenslets, NumberPhotons ]
+  # Required
+  PixelScale : 0            # [mas] : pixel scale of wavefront sensor detector
+  FieldOfView : 0           # int : Pixel dimensions of returned PSFs
+  NumberLenslets : []       # int : Number of WFS lenslets
+  NumberPhotons : []        # [ph/frame/subaperture] : Flux returned per lenslet and per readout
+
+  # Optional
+  SizeLenslets: [0.1]           # [m] : Size of WFS lenslets in meters. Same length as NumberLenslets
+  WfsType : 'Shack-Hartmann'    # 'Shack-Hartmann' or 'Pyramid'
+  Modulation : None             # [lambda/D] : Spot modulation radius in lambda/D units for pyramid WFS
+  Binning : 1                   # int : Sensor binning factor
+  SpotFWHM: [[0.0,0.0,0.0]]     # [mas] : HO spot scale. Proper description is missing ??
+  SpectralBandwidth: 0.         # [m] : Half-width of filter
+  Transmittance : [1.0]         # [0..1] : Transmittance at the considered wavelengths. See sensor_science description
+  Dispersion: [[0.0], [0.0]]    # [units ??] : Dispersion x/y at the considered wavelength in pixel. Must be the same size than Transmittance
+  SigmaRON : 0.0                # [e-]
+  Dark: 0.                      # [e-/s/pix]
+  SkyBackground: 0.             # [e-/s/pix]
+  Gain: 1.                      # [ADU/e-]
+  ExcessNoiseFactor : 1.0       # extra noise multiplication factor
+  NoiseVariance : [None]        # Noise Variance in rd^2. If not empty, this value overwrites the analytical noise variance calculation
+  Algorithm: "wcog"             # CoG computation algorithm
+  WindowRadiusWCoG: 2           # int: Number of pixels for windowing the low order WFS pixels
+  ThresholdWCoG: 0.             # Pixel value threshold for masking and resetting values. (Removes negative values ??)
+  NewValueThrPix: 0.            # New value for pixels lower than threshold
+
+
+sensor_LO:
+  description: |
+    Low-order wavefront sensor parameters
+
+  required_keywords: [ PixelScale, FieldOfView, NumberLenslets, NumberPhotons ]
+
+  # Required
+  PixelScale : 0            # [mas] : pixel scale of wavefront sensor detector
+  FieldOfView : 0           # int : Pixel dimensions of returned PSFs
+  NumberLenslets : []       # int : Number of WFS lenslets
+  NumberPhotons : []        # [ph/frame/subaperture] : Flux returned per lenslet and per readout
+
+  # Optional
+  SizeLenslets: [ 0.1 ]           # [m] : Size of WFS lenslets in meters. Same length as NumberLenslets
+  WfsType: 'Shack-Hartmann'    # 'Shack-Hartmann' or 'Pyramid'
+  Modulation: None             # [lambda/D] : Spot modulation radius in lambda/D units for pyramid WFS
+  Binning: 1                   # int : Sensor binning factor
+  SpotFWHM: [ [ 0.0,0.0,0.0 ] ]     # [mas] : HO spot scale. Proper description is missing ??
+  SpectralBandwidth: 0.         # [m] : Half-width of filter
+  Transmittance: [ 1.0 ]         # [0..1] : Transmittance at the considered wavelengths. See sensor_science description
+  Dispersion: [ [ 0.0 ], [ 0.0 ] ]    # [units ??] : Dispersion x/y at the considered wavelength in pixel. Must be the same size than Transmittance
+  SigmaRON: 0.0                # [e-]
+  Dark: 0.                      # [e-/s/pix]
+  SkyBackground: 0.             # [e-/s/pix]
+  Gain: 1.                      # [ADU/e-]
+  ExcessNoiseFactor: 1.0       # extra noise multiplication factor
+  NoiseVariance: [ None ]        # Noise Variance in rd^2. If not empty, this value overwrites the analytical noise variance calculation
+  Algorithm: "wcog"             # CoG computation algorithm
+  WindowRadiusWCoG: 2           # int: Number of pixels for windowing the low order WFS pixels
+  ThresholdWCoG: 0.             # Pixel value threshold for masking and resetting values. (Removes negative values ??)
+  NewValueThrPix: 0.            # New value for pixels lower than threshold
+
+
+DM:
+  description: |
+    Deformable Mirror characteristics
+
+    Notes
+    -----
+    Optimization parameters refer to a preferred direction for the AO correction ?? 
+
+  required_keywords: [ NumberActuators, DmPitchs ]
+
+  # Required
+  NumberActuators : []      # int : Number of DM actuators
+  DmPitchs : []             # [m] : DM actuators pitch
+
+  # Optional
+  InfModel : 'gaussian'               # DM influence function model
+  InfCoupling : [0.2]                 # DM mechanical coupling. Missing proper description ??
+  DmHeights : [0.0]                   # [m] : Conjugation altitude ??
+  OptimizationZenith : [0]            # [arcsec] : ??
+  OptimizationAzimuth : [0.]          # [deg] : ??
+  OptimizationWeight : [1.]           # [0..1] : ??
+  OptimizationConditioning : 100.     # ??
+  NumberReconstructedLayers : 3       # int : Number of reconstructed layers for tomographic systems
+  AoArea : 'circle'                   # Shape of the AO-corrected area
+
+
+RTC:
+  description: |
+    Real time control system characteristics for a closed loop AO system
+
+  required_keywords: [ LoopGain_HO, SensorFrameRate_HO, LoopDelaySteps_HO ]
+
+  # Required
+  LoopGain_HO : 1.0               # ??
+  SensorFrameRate_HO : 1.0E+3     # [Hz] : HO loop frequency
+  LoopDelaySteps_HO : 0           # int : Number of frames delay between sensor readout and actuator movement
+
+  # Optional
+  LoopGain_LO: None               # ??
+  SensorFrameRate_LO : None       # [Hz] : HO loop frequency
+  LoopDelaySteps_LO : None        # int : Number of frames delay between sensor readout and actuator movement
