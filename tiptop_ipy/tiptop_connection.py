@@ -10,7 +10,9 @@ from . import utils
 class TipTopConnection:
     def __init__(self, template_filename=None, template_dict=None):
 
+        self.filename = template_filename
         self.defaults = deepcopy(utils.DEFAULTS_YAML)
+
         self._param_categories = list(self.defaults.keys())
         self._template_yaml = None
 

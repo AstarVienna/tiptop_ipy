@@ -28,9 +28,35 @@ Query the TIPTOP server directly with the raw string from an existing ``.ini`` c
     >>> eris_path = tiptop_ipy.list_instruments(include_path=True)[1]
     >>> with open(eris_path) as f:
     >>>     eris_content = f.read()
-    >>>
+
     >>> hdulist = tiptop_ipy.utils.query_tiptop_server(ini_content=eris_content)
     >>> hdulist.writeto("eris.fits", overwrite=True)
+
+## Playing with parameters
+
+In general the parameters are kept in the ``.meta`` dictionary of the ``TipTopConnection`` object:
+
+    >>> eris.meta
+    {'telescope': {'TelescopeDiameter': 8.0, 'ZenithAngle': 30.0, 'ObscurationRatio': 0.16, ... }
+
+Categories can also be accessed directly using the ``getitem`` syntax:
+
+    >>> eris["sources_science"]
+    {'Wavelength': [1.65e-06], 'Zenith': [0], 'Azimuth': [0]}
+
+Values can be updated or changed using this syntax too.
+For example, we can ask TIPTOP to generate two PSFs (on-axis, 10" off-axis) by doing this:
+
+    >>> eris["sources_science"]["Zenith"] = [0, 10]
+    >>> eris["sources_science"]["Azimuth"] = [0, 180]
+    >>> eris.query_server()
+
+    >>> from matplotlib import pyplot as plt     
+    >>> from matplotlib.colors import LogNorm
+    >>> for i in range(2): 
+    >>>     plt.subplot(1, 2, i+1)
+    >>>     plt.imshow(eris.hdulist[1].data[i, :, :], norm=LogNorm())
+    >>> plt.show()
 
 ## PSF FITS file format
 
