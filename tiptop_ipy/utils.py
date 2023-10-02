@@ -1,26 +1,34 @@
 import os
-import os.path as p
+from pathlib import Path
 from tempfile import TemporaryFile
+from schema import Schema
 
 import requests
 from requests_toolbelt.multipart import decoder
 import yaml
+import json
+import pprint
 from astropy.io import fits
+import logging
 
 
-with open(p.join(p.dirname(__file__), "defaults.yaml")) as f:
+# Initialization of the module
+log = logging.getLogger("root")
+
+with open(Path(__file__).parent / "defaults.yaml") as f:
     DEFAULTS = f.read()
     DEFAULTS_YAML = yaml.full_load(DEFAULTS)
+    URL = "https://www.eso.org/p2services/any/tiptop"
 
 
 def list_instruments(include_path=False):
-    dname = p.join(p.dirname(__file__), "instrument_templates")
-    yamls = [fname for fname in os.listdir(dname) if ".yaml" in fname]
-    inis = [fname for fname in os.listdir(dname) if ".ini" in fname]
+    dname = Path(__file__).parent / "instrument_templates"
+    yamls = [fname for fname in dname.iterdir() if ".yaml" in fname]
+    inis = [fname for fname in dname.iterdir() if ".ini" in fname]
     fnames = yamls + inis
 
     if include_path:
-        fnames = [p.join(dname, fname) for fname in fnames]
+        fnames = [dname / fname for fname in fnames]
 
     return fnames
 
@@ -56,6 +64,28 @@ def make_yaml_from_ini(ini_contents: str) -> dict:
     return yaml_dict
 
 
+
+class Init:
+    @staticmethod
+    def from_dict(dictionary):
+        pass
+
+    def to_ini(self):
+        ini_str = ""
+        for key, sub_dict in self._dict.items():
+            ini_str += f"[{key}]\n"
+            for sub_key, sub_value in sub_dict.items():
+                if sub_key not in ["description", "required_keywords"]:
+                    safe_value = f"'{sub_value}'" if isinstance(sub_value, str) else sub_value
+                    ini_str += f"{sub_key} = {safe_value}\n"
+            ini_str += "\n"
+
+        return ini_str
+
+    def to_yaml(self):
+        return yaml.safe_dump(self._dict, default_flow_style=False)
+
+
 def query_tiptop_server(ini_content: str) -> fits.HDUList:
     """
     Returns a cube of PSFs for N on-sky positions relative to the optical axis
@@ -75,36 +105,64 @@ def query_tiptop_server(ini_content: str) -> fits.HDUList:
 
     """
 
+    log.debug(f"Ini content: {ini_content}")
+
     with TemporaryFile() as ini_stream:
         ini_stream.write(ini_content.encode("ascii"))
         ini_stream.seek(0)
 
-        url = f' https://www.eso.org/p2services/any/tiptop'
-        desc_file = p.join(p.dirname(__file__), "instrument_templates", "serviceDescription.json")
-        files = {'serviceDescription': (desc_file, open(desc_file, 'rb'), 'application/json'),
-                 'parameterFile': ("tiptop_ipy.ini", ini_stream, 'text/plain')}
-        response = requests.post(url, files=files)
+        desc_file = Path(__file__).parent / "instrument_templates" / "serviceDescription.json"
+        schema = Schema(json.loads(open(desc_file, 'rb').read()))
+
+        files = {
+            'serviceDescription': (desc_file.name, open(desc_file, 'rb'), 'application/json'),
+            'parameterFile': ("tiptop_ipy.ini", ini_stream, 'text/plain')
+        }
+        log.debug(f"Sending a request to {URL}: {files}")
+        response = requests.post(URL, files=files)
 
     if response.status_code == 200:
         payload = decoder.MultipartDecoder.from_response(response)
         if "cannot extract JSON structure from service output" in str(payload.parts[0].content):
-            raise ValueError("Config file cannot be parsed by server :(")
+            raise ValueError("Config file could not be parsed by server :(")
 
         with TemporaryFile(mode="w+b") as tmp:
             found_fits_file = False
+
             for part in payload.parts:
-                if part.headers.get(b'Content-Type') == b'application/octet-stream' and \
-                        "tiptop_ipy.fits" in part.headers.get(b'Content-Disposition').decode():
-                    tmp.write(part.content)
-                    hdus = fits.open(tmp, mode="update", lazy_load_hdus=False)
-                    _ = [hdu.data for hdu in hdus]          # force loading of data into RAM
-                    found_fits_file = True
+                log.debug(f"Part {part.headers}")
+                match part.headers.get(b'Content-Type'):
+                    case b'application/octet-stream':
+                        if "tiptop_ipy.fits" in part.headers.get(b'Content-Disposition').decode():
+                            tmp.write(part.content)
+                            hdus = fits.open(tmp, mode="update", lazy_load_hdus=False)
+                            _ = [hdu.data for hdu in hdus]          # force loading of data into RAM
+                            found_fits_file = True
+                        else:
+                            log.error(f"Received an application/octet-stream that is not a FITS file")
+
+                    case b'text/plain':
+                        log.debug(f"Received a plain text file")
+                        log.debug(f'"{part.content.decode()}"')
+
+                    case b'application/json':
+                        log.debug(f"Received a JSON file")
+                        content = json.loads(part.content.decode())
+                        #schema.validate(content)
+                        log.debug(content)
+
+                        if (code := content['admin']['exitCode']) == 0:
+                            log.info(f"TipTop completed successfully")
+                        else:
+                            log.error(f"Server returned an error, exit code {code}: {content['service']['message']}")
+
+                    case _:
+                        raise ValueError("Received something strange")
 
             if found_fits_file is False:
                 raise ValueError("TIPTOP did not create a FITS file. "
                                  "Something is bung with the config file.")
-
     else:
-        raise ValueError(f"TIPTOP server returned error: {response.status_code}")
+        raise ValueError(f"TIPTOP server returned error {response.status_code}: {response.text}")
 
     return hdus

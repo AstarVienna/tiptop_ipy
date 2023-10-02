@@ -1,6 +1,5 @@
 from copy import deepcopy
-import os
-import os.path as p
+from pathlib import Path
 import yaml
 import numpy as np
 
@@ -8,35 +7,35 @@ from . import utils
 
 
 class TipTopConnection:
-    def __init__(self, template_filename=None, template_dict=None):
-
-        self.filename = template_filename
+    def __init__(self, template_file=None, template_dict=None):
+        self.file = template_file
         self.defaults = deepcopy(utils.DEFAULTS_YAML)
 
         self._param_categories = list(self.defaults.keys())
         self._template_yaml = None
+        self._wd = Path(__name__).parent
 
-        if template_filename is not None:
-            fname = p.join(p.dirname(__file__), "instrument_templates", f"{template_filename}")
-            if os.path.exists(fname):
+        if self.file is not None:
+            fname = self.file.name
+
+            try:
                 with open(fname, "r") as f:
-                    if ".ini" in template_filename:
+                    if ".ini" in self.file.name:
                         self._template_yaml = utils.make_yaml_from_ini(f.read())
-                    elif ".yaml" in template_filename:
+                    elif ".yaml" in self.file.name:
                         self._template_yaml = yaml.full_load(f)
-
                     self.meta = deepcopy(self._template_yaml)
-
+            except FileNotFoundError as e:
+                raise ValueError(f"File {fname} does not exist") from e
         elif template_dict is not None and all([cat in template_dict for cat in self._param_categories]):
             self.meta = deepcopy(template_dict)
-
         else:
             self.meta = deepcopy(self.defaults)
 
         self.hdulist = None
 
     def query_server(self):
-        """ Requests a cube of PSFs from the ESO TIPTOP server """
+        """Requests a cube of PSFs from the ESO TIPTOP server """
         self.hdulist = utils.query_tiptop_server(self.ini_contents)
 
     def nearest_psf(self, x, y):
