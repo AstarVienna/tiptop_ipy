@@ -130,7 +130,7 @@ def query_tiptop_server(ini_content: str) -> fits.HDUList:
             found_fits_file = False
 
             for part in payload.parts:
-                log.debug(f"Part {part.headers}")
+                log.debug(f"Part {pprint.pformat(part.headers)}")
                 match part.headers.get(b'Content-Type'):
                     case b'application/octet-stream':
                         if "tiptop_ipy.fits" in part.headers.get(b'Content-Disposition').decode():
@@ -138,6 +138,7 @@ def query_tiptop_server(ini_content: str) -> fits.HDUList:
                             hdus = fits.open(tmp, mode="update", lazy_load_hdus=False)
                             _ = [hdu.data for hdu in hdus]          # force loading of data into RAM
                             found_fits_file = True
+                            log.info(f"TIPTOP sent back a FITS file")
                         else:
                             log.error(f"Received an application/octet-stream that is not a FITS file")
 
@@ -149,7 +150,7 @@ def query_tiptop_server(ini_content: str) -> fits.HDUList:
                         log.debug(f"Received a JSON file")
                         content = json.loads(part.content.decode())
                         #schema.validate(content)
-                        log.debug(content)
+                        log.debug(pprint.pformat(content, indent=4))
 
                         if (code := content['admin']['exitCode']) == 0:
                             log.info(f"TipTop completed successfully")
