@@ -1,7 +1,9 @@
+#!/usr/bin/env python
 # It would be super cool to spend time getting the configuration files to work
 import argparse
 import argparsedirs
 
+from pathlib import Path
 from scalyca import Scala
 from tiptop_ipy.tiptop_connection import TipTopConnection
 import logging
@@ -16,12 +18,12 @@ class TipTop(Scala):
 
     def add_arguments(self):
         self.argparser.add_argument('template', type=argparse.FileType('r'))
-        self.argparser.add_argument('outdir', type=argparsedirs.WriteableDir)
+        self.argparser.add_argument('outdir', action=argparsedirs.WriteableDir)
 
     def main(self):
         connection = TipTopConnection(self.args.template)
         hdu = connection.query_server()
-        hdu.write(self.args.outdir / 'tiptop.fits')
+        connection.writeto(Path(self.args.outdir) / 'tiptop.fits')
 
 
 if __name__ == "__main__":
