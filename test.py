@@ -21,11 +21,12 @@ class TipTop(Scala):
         self.add_argument('outdir', action=argparsedirs.WriteableDir)
 
     def main(self):
-        log.info(f"{self._prog} starting")
         connection = TipTopConnection(self.args.template)
         log.info(f"Making a request with config file {c.path(self.args.template.name)}")
         hdu = connection.query_server()
-        connection.writeto(Path(self.args.outdir) / 'tiptop.fits', overwrite=True)
+        outfile = Path(self.args.outdir) / Path(self.args.template.name).with_suffix('.fits').name
+        log.info(f"Saving the output to {c.path(outfile)}")
+        connection.writeto(outfile, overwrite=True)
 
 
 if __name__ == "__main__":

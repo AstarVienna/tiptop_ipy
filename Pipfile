@@ -10,8 +10,11 @@ numpy = "*"
 requests = "*"
 requests-toolbelt = "*"
 astropy = "*"
+dotmap = "*"
+colorama = "*"
+schema = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.12"
+python_version = "3.11"
