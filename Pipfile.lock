@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "792eb2d89da9312b8d5eda7ffff5f73bbdfc62a3dd83e8131ea755a8e4357b82"
+            "sha256": "eca3f6ac6e8121bb676e2dd885bbe07c51f8a73adcafdff2a216fb7730e174fa"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -345,14 +345,6 @@
             "index": "pypi",
             "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
             "version": "==1.0.0"
-        },
-        "scalyca": {
-            "hashes": [
-                "sha256:3edaa1d8a7b282c00e5c362af060c284a911c40bc8c0849d8164362e46e3a164",
-                "sha256:b4c44516a7ce6664c1596a1382a5febc798a7617af4d02e83751b3dcc56c726d"
-            ],
-            "index": "pypi",
-            "version": "==0.1.0"
         },
         "schema": {
             "hashes": [
