@@ -1,15 +1,31 @@
-from copy import deepcopy
-from pathlib import Path
+import copy
 import yaml
 import numpy as np
 
+from pathlib import Path
+
 from . import utils
+from .validatedconfig import TiptopConfig
+
+
+class TipTop:
+    @staticmethod
+    def list_instruments(include_path: bool = False):
+        dname = Path(__file__).parent / "instrument_templates"
+        yamls = [fname for fname in dname.iterdir() if ".yaml" in fname]
+        inis = [fname for fname in dname.iterdir() if ".ini" in fname]
+        fnames = yamls + inis
+
+        if include_path:
+            fnames = [dname / fname for fname in fnames]
+
+        return fnames
 
 
 class TipTopConnection:
     def __init__(self, template_file=None, template_dict=None):
         self.file = template_file
-        self.defaults = deepcopy(utils.DEFAULTS_YAML)
+        self.defaults = copy.deepcopy(utils.DEFAULTS_YAML)
 
         self._param_categories = list(self.defaults.keys())
         self._template_yaml = None
@@ -19,23 +35,18 @@ class TipTopConnection:
             fname = self.file.name
 
             try:
-                with open(fname, "r") as f:
-                    if ".ini" in self.file.name:
-                        self._template_yaml = utils.make_yaml_from_ini(f.read())
-                    elif ".yaml" in self.file.name:
-                        self._template_yaml = yaml.full_load(f)
-                    self.meta = deepcopy(self._template_yaml)
+                self.config = TiptopConfig.load(template_file)
             except FileNotFoundError as e:
                 raise ValueError(f"File {fname} does not exist") from e
         elif template_dict is not None and all([cat in template_dict for cat in self._param_categories]):
-            self.meta = deepcopy(template_dict)
+            self.meta = copy.deepcopy(template_dict)
         else:
-            self.meta = deepcopy(self.defaults)
+            self.meta = copy.deepcopy(self.defaults)
 
         self.hdulist = None
 
     def query_server(self):
-        """Requests a cube of PSFs from the ESO TIPTOP server """
+        """ Requests a cube of PSFs from the ESO TIPTOP server """
         self.hdulist = utils.query_tiptop_server(self.ini_contents)
 
     def nearest_psf(self, x, y):
@@ -55,7 +66,7 @@ class TipTopConnection:
     @property
     def ini_contents(self):
         """ Returns the str needed by the TIPTOP server from the self.meta dict """
-        return utils.make_ini_from_yaml(self.meta)
+        return utils.make_ini_from_yaml(self.config._data)
 
     def writeto(self, filename, **kwargs):
         """ Wrapper for astropy.io.fits.HDUList.writeto method """

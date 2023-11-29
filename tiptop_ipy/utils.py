@@ -21,18 +21,6 @@ with open(Path(__file__).parent / "defaults.yaml") as f:
     URL = "https://www.eso.org/p2services/any/tiptop"
 
 
-def list_instruments(include_path=False):
-    dname = Path(__file__).parent / "instrument_templates"
-    yamls = [fname for fname in dname.iterdir() if ".yaml" in fname]
-    inis = [fname for fname in dname.iterdir() if ".ini" in fname]
-    fnames = yamls + inis
-
-    if include_path:
-        fnames = [dname / fname for fname in fnames]
-
-    return fnames
-
-
 def make_ini_from_yaml(config_dict: dict) -> str:
     ini_str = ""
     for key, sub_dict in config_dict.items():
@@ -62,28 +50,6 @@ def make_yaml_from_ini(ini_contents: str) -> dict:
                 yaml_dict[curr_cat].update(dic)
 
     return yaml_dict
-
-
-
-class Init:
-    @staticmethod
-    def from_dict(dictionary):
-        pass
-
-    def to_ini(self):
-        ini_str = ""
-        for key, sub_dict in self._dict.items():
-            ini_str += f"[{key}]\n"
-            for sub_key, sub_value in sub_dict.items():
-                if sub_key not in ["description", "required_keywords"]:
-                    safe_value = f"'{sub_value}'" if isinstance(sub_value, str) else sub_value
-                    ini_str += f"{sub_key} = {safe_value}\n"
-            ini_str += "\n"
-
-        return ini_str
-
-    def to_yaml(self):
-        return yaml.safe_dump(self._dict, default_flow_style=False)
 
 
 def query_tiptop_server(ini_content: str) -> fits.HDUList:

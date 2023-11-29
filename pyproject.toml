@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "tiptop-ipy"
+version = "0.1.0"
+description = "A simple wrapper for accessing the ESO TIPTOP microservice from Python"
+authors = [
+    "Kieran Leschinski, <kieran.leschinski@univie.ac.at>",
+    "Martin Baláž, <martin.balaz@univie.ac.at>"
+]
+license = "GPL"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.11"
+scalyca = "^0.1.0"
+
+[tool.poetry.group.dev.dependencies]
+twine = "^4.0.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
