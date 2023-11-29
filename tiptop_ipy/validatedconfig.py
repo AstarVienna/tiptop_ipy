@@ -13,7 +13,7 @@ class TiptopConfig(Config):
     _sensor_schema = Schema({
         'NumberLenslets': [int],
         Optional('SizeLenslets'): [number],
-        'PixelScale': int,
+        'PixelScale': number,
         'FieldOfView': int,
         'NumberPhotons': [int],
         Optional('Binning', default=1): int,
@@ -22,13 +22,18 @@ class TiptopConfig(Config):
         Optional('Dark'): number,
         Optional('SkyBackground'): number,
         Optional('Gain'): number,
-        'ExcessNoiseFactor': number,
+        Optional('ExcessNoiseFactor', default=2.0): number,
+        Optional('Dispersion'): [[float]],
+        Optional('SpectralBandwidth'): number,
         Optional('ThresholdWCoG'): number,
         Optional('WindowRadiusWCoG'): number,
         Optional('NewValueThrPix'): number,
         Optional('Transmittance'): [number],
         Optional('NoiseVariance'): [Or(None, number)],
         Optional('Modulation', default=None): Or(None, number),
+        Optional('Algorithm', default='wcog'): str,
+        Optional('Gain', default=1.0): number,
+        Optional('SpotFWHM', default=[[0, 0, 0]]): [[number]],
     })
     _source_schema = Schema({
         'Wavelength': number,
@@ -74,7 +79,6 @@ class TiptopConfig(Config):
             'PixelScale': number,
             'FieldOfView': number,
             Optional('Binning', default=0): number,
-
         },
         'sensor_HO': _sensor_schema,
         Optional('sensor_LO'): _sensor_schema,
