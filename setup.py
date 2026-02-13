@@ -36,7 +36,7 @@ def setup_package():
           include_package_data=True,
           packages=find_packages(exclude=('tests', 'docs')),
           package_dir={'tiptop_ipy': 'tiptop_ipy'},
-          install_requires=['numpy', 'astropy', 'matplotlib', 'yaml', 'requests', 'requests_toolbelt'],
+          install_requires=['numpy', 'astropy', 'matplotlib', 'PyYAML', 'requests', 'requests_toolbelt'],
           classifiers=["Programming Language :: Python :: 3",
                        "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
                        "Operating System :: OS Independent",
