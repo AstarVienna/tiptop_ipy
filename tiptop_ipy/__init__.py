@@ -1,4 +1,4 @@
-from .tiptop_connection import TipTopConnection
-from . import utils
-from .utils import DEFAULTS, DEFAULTS_YAML
-from .utils import list_instruments, query_tiptop_server
+from .tiptop_connection import TipTop, TipTopConnection
+from .result import TipTopResult
+
+__all__ = ["TipTop", "TipTopResult", "TipTopConnection"]

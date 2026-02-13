@@ -7,6 +7,8 @@ from requests_toolbelt.multipart import decoder
 import yaml
 from astropy.io import fits
 
+from .ini_parser import parse_ini, write_ini
+
 
 with open(p.join(p.dirname(__file__), "defaults.yaml")) as f:
     DEFAULTS = f.read()
@@ -14,97 +16,92 @@ with open(p.join(p.dirname(__file__), "defaults.yaml")) as f:
 
 
 def list_instruments(include_path=False):
-    dname = p.join(p.dirname(__file__), "instrument_templates")
-    yamls = [fname for fname in os.listdir(dname) if ".yaml" in fname]
-    inis = [fname for fname in os.listdir(dname) if ".ini" in fname]
-    fnames = yamls + inis
-
-    if include_path:
-        fnames = [p.join(dname, fname) for fname in fnames]
-
-    return fnames
-
-
-def make_ini_from_yaml(config_dict: dict) -> str:
-    ini_str = ""
-    for key, sub_dict in config_dict.items():
-        ini_str += f"[{key}]\n"
-        for sub_key, value in sub_dict.items():
-            if sub_key not in ["description", "required_keywords"]:
-                ini_str += f"{sub_key} = {value}\n" if not isinstance(value, str) else f"{sub_key} = '{value}'\n"
-        ini_str += "\n"
-
-    return ini_str
-
-
-def make_yaml_from_ini(ini_contents: str) -> dict:
-    yaml_dict = {}
-    ini_list = ini_contents.split("\n")
-    curr_cat = None
-    for line in ini_list:
-        line = line.strip()
-        if len(line) > 0 and line[0] != ";":
-            if line[0] == "[" and line[-1] == "]":
-                curr_cat = line[1:-1]
-                yaml_dict[curr_cat] = {}
-            else:
-                line = line.replace("=", ":").replace("None", "!!null None")
-                dic = yaml.full_load(line)
-
-                yaml_dict[curr_cat].update(dic)
-
-    return yaml_dict
-
-
-def query_tiptop_server(ini_content: str) -> fits.HDUList:
-    """
-    Returns a cube of PSFs for N on-sky positions relative to the optical axis
+    """List available instrument template names.
 
     Parameters
     ----------
-    ini_content : str, dict
-        str - the raw contents of a tiptop config .ini file
+    include_path : bool
+        If True, return full paths instead of just names.
+
+    Returns
+    -------
+    names : list[str]
+        Sorted list of instrument names (without .ini extension)
+        or full paths if include_path is True.
+    """
+    dname = p.join(p.dirname(__file__), "instrument_templates")
+    fnames = sorted(
+        fname for fname in os.listdir(dname)
+        if fname.endswith(".ini")
+    )
+
+    if include_path:
+        return [p.join(dname, fname) for fname in fnames]
+
+    return [fname.replace(".ini", "") for fname in fnames]
+
+
+def query_tiptop_server(ini_content, timeout=120):
+    """Send an INI config to the TIPTOP server and return the FITS result.
+
+    Parameters
+    ----------
+    ini_content : str
+        The raw contents of a TIPTOP config .ini file.
+    timeout : int
+        Request timeout in seconds.
 
     Returns
     -------
     hdus : fits.HDUList
-        A FITS file with 3 extensions:
-        - [0] PrimaryHDU is empty apart from header info
-        - [1] ImageHDU contains N PSFs for each of the *radial* on-sky coords from sources_science["Azimuth", "Zenith"]
-        - [2] ImageHDU contains image with dimensions (N, 2) holding the *cartesian* on-sky coordinates of the PSFs
-
+        A FITS file with extensions:
+        - [0] PrimaryHDU: header info
+        - [1] ImageHDU: PSF cube(s)
+        - [-1] ImageHDU: (2, N) cartesian coordinates of PSF positions
     """
-
     with TemporaryFile() as ini_stream:
         ini_stream.write(ini_content.encode("ascii"))
         ini_stream.seek(0)
 
-        url = f' https://www.eso.org/p2services/any/tiptop'
-        desc_file = p.join(p.dirname(__file__), "instrument_templates", "serviceDescription.json")
-        files = {'serviceDescription': (desc_file, open(desc_file, 'rb'), 'application/json'),
-                 'parameterFile': ("tiptop_ipy.ini", ini_stream, 'text/plain')}
-        response = requests.post(url, files=files)
+        url = "https://www.eso.org/p2services/any/tiptop"
+        desc_file = p.join(p.dirname(__file__), "instrument_templates",
+                           "serviceDescription.json")
+        with open(desc_file, "rb") as df:
+            files = {
+                "serviceDescription": (desc_file, df, "application/json"),
+                "parameterFile": ("tiptop_ipy.ini", ini_stream, "text/plain"),
+            }
+            response = requests.post(url, files=files, timeout=timeout)
 
-    if response.status_code == 200:
-        payload = decoder.MultipartDecoder.from_response(response)
-        if "cannot extract JSON structure from service output" in str(payload.parts[0].content):
-            raise ValueError("Config file cannot be parsed by server :(")
+    if response.status_code != 200:
+        raise ValueError(
+            f"TIPTOP server returned HTTP {response.status_code}: "
+            f"{response.text[:200]}"
+        )
 
-        with TemporaryFile(mode="w+b") as tmp:
-            found_fits_file = False
-            for part in payload.parts:
-                if part.headers.get(b'Content-Type') == b'application/octet-stream' and \
-                        "tiptop_ipy.fits" in part.headers.get(b'Content-Disposition').decode():
-                    tmp.write(part.content)
-                    hdus = fits.open(tmp, mode="update", lazy_load_hdus=False)
-                    _ = [hdu.data for hdu in hdus]          # force loading of data into RAM
-                    found_fits_file = True
+    payload = decoder.MultipartDecoder.from_response(response)
+    if "cannot extract JSON structure from service output" in str(
+        payload.parts[0].content
+    ):
+        raise ValueError("Config file cannot be parsed by server")
 
-            if found_fits_file is False:
-                raise ValueError("TIPTOP did not create a FITS file. "
-                                 "Something is bung with the config file.")
+    with TemporaryFile(mode="w+b") as tmp:
+        found_fits_file = False
+        for part in payload.parts:
+            content_type = part.headers.get(b"Content-Type")
+            disposition = part.headers.get(b"Content-Disposition", b"").decode()
+            if (content_type == b"application/octet-stream"
+                    and "tiptop_ipy.fits" in disposition):
+                tmp.write(part.content)
+                hdus = fits.open(tmp, mode="update", lazy_load_hdus=False)
+                # Force loading data into RAM before temp file closes
+                _ = [hdu.data for hdu in hdus]
+                found_fits_file = True
 
-    else:
-        raise ValueError(f"TIPTOP server returned error: {response.status_code}")
+        if not found_fits_file:
+            raise ValueError(
+                "TIPTOP did not return a FITS file. "
+                "Check the config for errors."
+            )
 
     return hdus

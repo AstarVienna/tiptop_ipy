@@ -42,6 +42,17 @@ telescope:
   PathApodizer: ""              # path to a model of amplitude apodizaton of the electric field in the pupil in .fits file
   PathStatModes: ""             # path to a model of a basis of modes to describe addtionnal static aberrations
   coeficientOfTheStaticMode: "" # ??
+  PupilAngle: 0.0              # [deg] : pupil angle
+  extraErrorNm: 0              # [nm] : additional error budget from sources not included in the simulation
+  extraErrorExp: -2             # exponent for the extra error PSD model
+  extraErrorMin: 0              # minimum spatial frequency for extra error
+  extraErrorLoNm: [0]           # [nm] : additional low-order error budget (on-axis, edge)
+  extraErrorLoExp: -2           # exponent for the extra low-order error PSD model
+  extraErrorLoMin: 0            # minimum spatial frequency for extra low-order error
+  windPsdFile: ""               # path to wind shake PSD file in .fits format
+  jitter_FWHM: 0.0             # [mas] : extra tip/tilt jitter FWHM
+  glFocusOnNGS: False           # ground layer focus controlled with NGS WFS
+  zCoefStaticOn: []             # Zernike coefficients for static aberrations [nm]
 
 
 sources_science:
@@ -101,6 +112,44 @@ sources_LO:
 
   # Optional
   Height : 0               # [m] : Height of guide stars. 0 : inf
+
+
+sources_Focus:
+  description: |
+    Focus sensor source parameters. Used in MCAO systems (e.g. MORFEO)
+    to sense global focus from natural guide stars.
+
+  required_keywords: [ Wavelength ]
+
+  # Required
+  Wavelength : []          # [m] : sensing wavelength for global focus sensors
+
+
+sensor_Focus:
+  description: |
+    Global focus sensor parameters. Used in MCAO systems (e.g. MORFEO).
+
+  required_keywords: [ PixelScale, FieldOfView, NumberLenslets, NumberPhotons ]
+
+  # Required
+  PixelScale : 0            # [mas] : pixel scale of focus sensor detector
+  FieldOfView : 0           # int : pixel dimensions
+  NumberLenslets : []       # int : number of sub-apertures
+  NumberPhotons : []        # [ph/frame/subaperture] : flux per sub-aperture
+
+  # Optional
+  Binning: 1                # int : sensor binning factor
+  SpotFWHM: [[0.0,0.0,0.0]] # [mas]
+  SigmaRON: 0.0             # [e-]
+  Dark: 0.                   # [e-/s/pix]
+  SkyBackground: 0.          # [e-/s/pix]
+  Gain: 1.                   # [ADU/e-]
+  ExcessNoiseFactor: 1.0     # extra noise multiplication factor
+  Algorithm: "wcog"          # CoG computation algorithm
+  WindowRadiusWCoG: 2        # int
+  ThresholdWCoG: 0.          # pixel value threshold
+  NewValueThrPix: 0.         # new value for pixels lower than threshold
+  noNoise: False             # disable noise in simulation
 
 
 sensor_science:
@@ -164,6 +213,7 @@ sensor_HO:
   WindowRadiusWCoG: 2           # int: Number of pixels for windowing the low order WFS pixels
   ThresholdWCoG: 0.             # Pixel value threshold for masking and resetting values. (Removes negative values ??)
   NewValueThrPix: 0.            # New value for pixels lower than threshold
+  addMcaoWFsensConeError: False  # add MCAO WFS cone error (for LGS tomography systems)
 
 
 sensor_LO:
@@ -197,6 +247,9 @@ sensor_LO:
   WindowRadiusWCoG: 2           # int: Number of pixels for windowing the low order WFS pixels
   ThresholdWCoG: 0.             # Pixel value threshold for masking and resetting values. (Removes negative values ??)
   NewValueThrPix: 0.            # New value for pixels lower than threshold
+  noNoise: False                 # disable noise in simulation
+  filtZernikeCov: False          # reduce anisoplanatic error on LO due to HO correction
+  addAliasError: False           # add aliasing on LO from HO residual
 
 
 DM:
@@ -238,5 +291,8 @@ RTC:
 
   # Optional
   LoopGain_LO: None               # ??
-  SensorFrameRate_LO : None       # [Hz] : HO loop frequency
+  SensorFrameRate_LO : None       # [Hz] : LO loop frequency
   LoopDelaySteps_LO : None        # int : Number of frames delay between sensor readout and actuator movement
+  LoopGain_Focus: None             # Focus loop gain
+  SensorFrameRate_Focus: None      # [Hz] : Focus loop frequency
+  LoopDelaySteps_Focus: None       # int : Focus loop frame delay
