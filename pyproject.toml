@@ -1,0 +1,65 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tiptop_ipy"
+version = "0.2.0"
+description = "A Python wrapper for the ESO TIPTOP adaptive optics PSF simulation microservice"
+readme = "README.md"
+license = "GPL-3.0-or-later"
+requires-python = ">=3.9"
+authors = [
+    {name = "The TIPTOP team, wrapped by Kieran Leschinski", email = "kieran.leschinski@univie.ac.at"},
+]
+keywords = ["astronomy", "adaptive optics", "PSF", "TIPTOP", "ESO"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Astronomy",
+]
+dependencies = [
+    "numpy",
+    "astropy",
+    "matplotlib",
+    "PyYAML",
+    "requests",
+    "requests_toolbelt",
+]
+
+[project.urls]
+Homepage = "https://github.com/astronomyk/tiptop_ipy"
+Documentation = "https://tiptop-ipy.readthedocs.io"
+Repository = "https://github.com/astronomyk/tiptop_ipy"
+Issues = "https://github.com/astronomyk/tiptop_ipy/issues"
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "sphinx",
+    "sphinx_rtd_theme",
+]
+
+[tool.setuptools.packages.find]
+include = ["tiptop_ipy*"]
+exclude = ["tests*", "docs*"]
+
+[tool.setuptools.package-data]
+tiptop_ipy = [
+    "defaults.yaml",
+    "instrument_templates/*.ini",
+    "instrument_templates/*.json",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tiptop_ipy/tests"]
+markers = [
+    "network: tests that require network access to the ESO TIPTOP server",
+]
