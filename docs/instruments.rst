@@ -85,6 +85,82 @@ Available templates
      - SCAO
      - Spectro-Polarimetric High-contrast Exoplanet REsearch
 
+Configuration summary
+---------------------
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 15 15 15
+
+   * - INI filename
+     - Wavelengths
+     - Field of View
+     - Cn2 Layers
+   * - ``ANDES.ini``
+     - 1
+     - 1024
+     - 35
+   * - ``ERIS.ini``
+     - 1
+     - 256
+     - 10
+   * - ``ERIS_LGS.ini``
+     - 1
+     - 256
+     - 10
+   * - ``HARMONI_SCAO.ini``
+     - 1
+     - 640
+     - 10
+   * - ``HarmoniLTAO_1.ini``
+     - 1
+     - 640
+     - 10
+   * - ``HarmoniLTAO_2.ini``
+     - 1
+     - 640
+     - 10
+   * - ``HarmoniLTAO_3.ini``
+     - 1
+     - 640
+     - 10
+   * - ``MAVIS.ini``
+     - 1
+     - 512
+     - 10
+   * - ``METIS.ini``
+     - 1
+     - 2048
+     - 35
+   * - ``MICADO_SCAO.ini``
+     - 1
+     - 2048
+     - 35
+   * - ``MICADO_SCAO_less_layers.ini``
+     - 1
+     - 2048
+     - 3
+   * - ``MORFEO.ini``
+     - 1
+     - 512
+     - 35
+   * - ``MUSE_LTAO.ini``
+     - 1
+     - 450
+     - 10
+   * - ``SOUL.ini``
+     - 1
+     - 256
+     - 4
+   * - ``SPHERE.ini``
+     - 1
+     - 256
+     - 10
+
+- **Wavelengths**: number of entries in ``sources_science.Wavelength``
+- **Field of View**: ``sensor_science.FieldOfView`` (pixels per side)
+- **Cn2 Layers**: number of entries in ``atmosphere.Cn2Heights``
+
 Usage
 -----
 
