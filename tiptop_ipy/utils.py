@@ -99,9 +99,24 @@ def query_tiptop_server(ini_content, timeout=120):
                 found_fits_file = True
 
         if not found_fits_file:
+            # Dump what the server actually sent back
+            parts_summary = []
+            max_msg_len = -1
+            for i, part in enumerate(payload.parts):
+                ct = part.headers.get(b"Content-Type", b"unknown").decode()
+                disp = part.headers.get(b"Content-Disposition", b"").decode()
+                try:
+                    body = part.content.decode(errors="replace")[:max_msg_len]
+                except Exception:
+                    body = repr(part.content[:max_msg_len])
+                parts_summary.append(
+                    f"  Part {i}: Content-Type={ct}, "
+                    f"Disposition={disp}\n  {body}"
+                )
+            detail = "\n".join(parts_summary)
             raise ValueError(
-                "TIPTOP did not return a FITS file. "
-                "Check the config for errors."
+                f"TIPTOP did not return a FITS file. "
+                f"Server response ({len(payload.parts)} parts):\n{detail}"
             )
 
     return hdus
