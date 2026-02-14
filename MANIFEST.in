@@ -8,3 +8,4 @@ include tiptop_ipy/defaults.yaml
 exclude claude_wishlist.md
 prune docs/_build
 prune .claude
+prune status
