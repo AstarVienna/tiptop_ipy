@@ -57,7 +57,6 @@ Access a single parameter with tuple indexing:
 
    tt["atmosphere", "Seeing"] = 0.6
    tt["telescope", "ZenithAngle"] = 15.0
-   tt["sources_science", "Wavelength"] = [1.2e-6, 1.65e-6, 2.2e-6]
 
 Check what you've changed:
 
@@ -65,14 +64,58 @@ Check what you've changed:
 
    tt.diff()
    # {'atmosphere': {'Seeing': (0.8, 0.6)},
-   #  'telescope': {'ZenithAngle': (30.0, 15.0)},
-   #  'sources_science': {'Wavelength': ([2200e-9], [1.2e-6, 1.65e-6, 2.2e-6])}}
+   #  'telescope': {'ZenithAngle': (30.0, 15.0)}}
 
 Reset to the original template values at any time:
 
 .. code-block:: python
 
    tt.reset()
+
+Setting wavelengths
+^^^^^^^^^^^^^^^^^^^
+
+The ``wavelengths`` property works in **microns** by default, or accepts
+any ``astropy.units.Quantity``:
+
+.. code-block:: python
+
+   import astropy.units as u
+
+   tt.wavelengths                     # current value as Quantity in µm
+   # <Quantity [1.65] um>
+
+   tt.wavelengths = [1.2, 1.65, 2.2]          # plain floats → microns
+   tt.wavelengths = [500, 700] * u.nm          # nanometres
+   tt.wavelengths = 16500 * u.AA               # Angstrom
+
+The internal config (``sources_science.Wavelength``) is always stored in
+metres, but you never need to worry about that.
+
+Setting off-axis positions
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Use ``add_off_axis_positions`` to specify where on the sky the PSFs should
+be generated, using Cartesian (x, y) coordinates:
+
+.. code-block:: python
+
+   # On-axis + 5" offset in x and y (plain floats → arcsec)
+   tt.add_off_axis_positions([(0, 0), (5, 5)])
+
+   # With explicit units
+   tt.add_off_axis_positions([(0, 0), (5 * u.arcmin, 0 * u.arcsec)])
+
+Read back the current positions:
+
+.. code-block:: python
+
+   x, y = tt.positions    # Quantity arrays in arcsec
+   # (<Quantity [0., 5.] arcsec>, <Quantity [0., 5.] arcsec>)
+
+Under the hood this converts to ``sources_science.Zenith`` (radial
+distance) and ``sources_science.Azimuth`` (angle from the x-axis in
+degrees).
 
 4. Validate the configuration
 -------------------------------

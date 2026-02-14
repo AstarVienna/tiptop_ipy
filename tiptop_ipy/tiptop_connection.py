@@ -1,7 +1,11 @@
 """Main interface to the TIPTOP PSF simulation microservice."""
 from copy import deepcopy
+import math
 import os
 import os.path as p
+
+import numpy as np
+import astropy.units as u
 
 from . import utils
 from .ini_parser import parse_ini, write_ini
@@ -245,6 +249,116 @@ class TipTop:
     def ini_contents(self):
         """The INI string representation of the current config."""
         return write_ini(self._config)
+
+    # --- Wavelengths ---
+
+    @property
+    def wavelengths(self):
+        """Science wavelengths as an astropy Quantity in microns.
+
+        Reads ``sources_science.Wavelength`` (stored in metres internally)
+        and returns values as ``u.um``.
+
+        Returns
+        -------
+        wavelengths : astropy.units.Quantity
+            Wavelengths in microns.
+        """
+        wl = self._config.get("sources_science", {}).get("Wavelength", [])
+        if not isinstance(wl, list):
+            wl = [wl]
+        return (np.asarray(wl, dtype=float) * u.m).to(u.um)
+
+    @wavelengths.setter
+    def wavelengths(self, values):
+        """Set science wavelengths.
+
+        Parameters
+        ----------
+        values : Quantity, float, or list
+            Wavelength(s). If an astropy Quantity, converted to metres.
+            If plain floats, assumed to be in microns.
+        """
+        if isinstance(values, u.Quantity):
+            metres = values.to(u.m).value
+        else:
+            if isinstance(values, (int, float)):
+                values = [values]
+            metres = [v * 1e-6 for v in values]
+        if not hasattr(metres, '__len__'):
+            metres = [metres]
+        else:
+            metres = list(metres)
+        self["sources_science", "Wavelength"] = metres
+
+    # --- Positions ---
+
+    @property
+    def positions(self):
+        """Science source positions as (x, y) Quantities in arcsec.
+
+        Computed from ``sources_science.Zenith`` (radial distance) and
+        ``sources_science.Azimuth`` (angle in degrees).
+
+        Returns
+        -------
+        x, y : astropy.units.Quantity
+            Cartesian coordinates in arcsec.
+        """
+        zenith = self._config.get("sources_science", {}).get("Zenith", [0.0])
+        azimuth = self._config.get("sources_science", {}).get("Azimuth", [0.0])
+        zenith = np.asarray(zenith, dtype=float)
+        azimuth_rad = np.deg2rad(azimuth)
+        x = zenith * np.cos(azimuth_rad)
+        y = zenith * np.sin(azimuth_rad)
+        return x * u.arcsec, y * u.arcsec
+
+    def add_off_axis_positions(self, positions):
+        """Set science source positions from (x, y) coordinates.
+
+        Converts Cartesian (x, y) to polar (Zenith, Azimuth) and updates
+        ``sources_science.Zenith`` and ``sources_science.Azimuth``.
+
+        Parameters
+        ----------
+        positions : tuple or list of tuples
+            A single ``(x, y)`` tuple or a list of ``(x, y)`` tuples.
+            If values are astropy Quantities, they are converted to arcsec.
+            If plain floats, assumed to be in arcsec.
+
+        Examples
+        --------
+        ::
+
+            tt = TipTop("ERIS")
+            tt.add_off_axis_positions((0, 0))           # on-axis only
+            tt.add_off_axis_positions([(0, 0), (5, 5)])  # on-axis + 5",5"
+
+            # With units
+            import astropy.units as u
+            tt.add_off_axis_positions([(0, 0)*u.arcsec, (5, 5)*u.arcsec])
+        """
+        # Accept a single (x, y) tuple
+        if (isinstance(positions, tuple)
+                and len(positions) == 2
+                and not isinstance(positions[0], (list, tuple))):
+            positions = [positions]
+
+        zeniths = []
+        azimuths = []
+        for x, y in positions:
+            # Convert Quantities to arcsec
+            if isinstance(x, u.Quantity):
+                x = x.to(u.arcsec).value
+            if isinstance(y, u.Quantity):
+                y = y.to(u.arcsec).value
+            r = math.sqrt(x * x + y * y)
+            theta = math.degrees(math.atan2(y, x))
+            zeniths.append(round(r, 6))
+            azimuths.append(round(theta, 6))
+
+        self["sources_science", "Zenith"] = zeniths
+        self["sources_science", "Azimuth"] = azimuths
 
     # --- Display ---
 
