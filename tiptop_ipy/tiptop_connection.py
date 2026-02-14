@@ -32,6 +32,15 @@ class TipTop:
     If neither is given, defaults are used.
     """
 
+    MAX_FOV = 512
+    """Hard limit on ``sensor_science.FieldOfView`` when loading INI files.
+
+    Templates and user INI files may specify very large fields of view
+    (e.g. 2048 for MICADO) that cause the ESO server to time out.  Values
+    above this cap are silently reduced on load.  Users can still increase
+    the value afterwards via ``tt["sensor_science", "FieldOfView"] = N``.
+    """
+
     def __init__(self, instrument=None, ini_file=None):
         self._instrument = None
         self._config = None
@@ -41,10 +50,12 @@ class TipTop:
             self._instrument = instrument
             path = self._resolve_template(instrument)
             self._config = parse_ini(path)
+            self._cap_fov()
             self._original_config = deepcopy(self._config)
 
         elif ini_file is not None:
             self._config = parse_ini(ini_file)
+            self._cap_fov()
             self._original_config = deepcopy(self._config)
 
         else:
@@ -79,6 +90,13 @@ class TipTop:
             f"No template found for '{instrument}'. "
             f"Available: {available}"
         )
+
+    def _cap_fov(self):
+        """Cap sensor_science.FieldOfView to MAX_FOV on load."""
+        sec = self._config.get("sensor_science")
+        if sec and isinstance(sec.get("FieldOfView"), (int, float)):
+            if sec["FieldOfView"] > self.MAX_FOV:
+                sec["FieldOfView"] = self.MAX_FOV
 
     @staticmethod
     def _clean_defaults():
@@ -177,6 +195,7 @@ class TipTop:
             Path to .ini file.
         """
         self._config = parse_ini(path)
+        self._cap_fov()
         self._original_config = deepcopy(self._config)
 
     def reset(self):

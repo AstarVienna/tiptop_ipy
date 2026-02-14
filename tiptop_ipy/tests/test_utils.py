@@ -59,8 +59,8 @@ class TestParseIniIntegration:
         paths = utils.list_instruments(include_path=True)
         eris_path = [p for p in paths if "ERIS" in p and "LGS" not in p][0]
         config = parse_ini(eris_path)
-        assert "telescope" in config
-        assert config["telescope"]["TelescopeDiameter"] == 8.0
+        assert "atmosphere" in config
+        assert config["atmosphere"]["Seeing"] == 0.8
 
     def test_parses_morfeo(self):
         from tiptop_ipy.ini_parser import parse_ini

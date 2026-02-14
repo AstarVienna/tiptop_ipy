@@ -98,7 +98,7 @@ Configuration summary
      - Cn2 Layers
    * - ``ANDES.ini``
      - 1
-     - 1024
+     - 512
      - 35
    * - ``ERIS.ini``
      - 1
@@ -110,19 +110,19 @@ Configuration summary
      - 10
    * - ``HARMONI_SCAO.ini``
      - 1
-     - 640
+     - 512
      - 10
    * - ``HarmoniLTAO_1.ini``
      - 1
-     - 640
+     - 512
      - 10
    * - ``HarmoniLTAO_2.ini``
      - 1
-     - 640
+     - 512
      - 10
    * - ``HarmoniLTAO_3.ini``
      - 1
-     - 640
+     - 512
      - 10
    * - ``MAVIS.ini``
      - 1
@@ -130,15 +130,15 @@ Configuration summary
      - 10
    * - ``METIS.ini``
      - 1
-     - 2048
+     - 512
      - 35
    * - ``MICADO_SCAO.ini``
      - 1
-     - 2048
+     - 512
      - 35
    * - ``MICADO_SCAO_less_layers.ini``
      - 1
-     - 2048
+     - 512
      - 3
    * - ``MORFEO.ini``
      - 1
@@ -158,8 +158,17 @@ Configuration summary
      - 10
 
 - **Wavelengths**: number of entries in ``sources_science.Wavelength``
-- **Field of View**: ``sensor_science.FieldOfView`` (pixels per side)
+- **Field of View**: ``sensor_science.FieldOfView`` (pixels per side), capped at 512 on load
 - **Cn2 Layers**: number of entries in ``atmosphere.Cn2Heights``
+
+.. note::
+
+   ``sensor_science.FieldOfView`` is capped at 512 pixels when loading
+   templates or INI files.  Larger values cause the ESO server to time out.
+   You can override this after loading::
+
+      tt = TipTop("MICADO_SCAO")
+      tt["sensor_science", "FieldOfView"] = 2048  # at your own risk
 
 Usage
 -----
