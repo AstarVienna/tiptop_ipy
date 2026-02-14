@@ -151,6 +151,10 @@ first and will raise ``ValueError`` if there are errors.
    result.psf          # 2D or 3D array
    result.psf.shape    # e.g. (1, 256, 256)
 
+   # Strehl ratio and FWHM
+   result.strehl       # e.g. array([0.891])
+   result.fwhm         # e.g. array([44.1])  (mas)
+
    # Coordinates of each PSF position
    result.x  # arcsec
    result.y  # arcsec
@@ -165,6 +169,56 @@ first and will raise ``ValueError`` if there are errors.
 
    # Save to FITS
    result.writeto("my_psf.fits", overwrite=True)
+
+Example: plotting a synthetic PSF
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The ``TipTopResult.plot()`` method produces a log-scaled PSF image.
+Below is a demonstration using a synthetic Airy-like PSF (no server
+connection required):
+
+.. plot::
+
+   import numpy as np
+   import matplotlib.pyplot as plt
+   from astropy.io import fits
+   from tiptop_ipy.result import TipTopResult
+
+   # Generate a synthetic Airy-like PSF
+   size = 128
+   y, x = np.mgrid[-size//2:size//2, -size//2:size//2]
+   r = np.sqrt(x**2 + y**2).astype(float)
+   r[r == 0] = 1e-10
+   psf = (np.sin(np.pi * r / 4) / (np.pi * r / 4))**2
+   psf /= psf.sum()
+
+   # Build a mock FITS HDUList matching TIPTOP server format
+   primary = fits.PrimaryHDU()
+   hdr = fits.Header()
+   hdr["CONTENT"] = "PSF CUBE"
+   hdr["WL_NM"] = 1650
+   hdr["PIX_MAS"] = 14
+   hdr["CCX0000"] = 0.0
+   hdr["CCY0000"] = 0.0
+   hdr["SR0000"] = 0.85
+   hdr["FWHM0000"] = 50.0
+   cube = fits.ImageHDU(data=psf[np.newaxis, :, :].astype(np.float32), header=hdr)
+
+   ol_hdr = fits.Header(); ol_hdr["CONTENT"] = "OPEN-LOOP PSF"
+   ol = fits.ImageHDU(data=np.random.rand(size, size).astype(np.float32), header=ol_hdr)
+
+   dl_hdr = fits.Header(); dl_hdr["CONTENT"] = "DIFFRACTION LIMITED PSF"
+   dl = fits.ImageHDU(data=psf.astype(np.float32), header=dl_hdr)
+
+   pr_hdr = fits.Header(); pr_hdr["CONTENT"] = "Final PSFs profiles"
+   pr = fits.ImageHDU(data=np.random.rand(2, 1, size//2).astype(np.float32), header=pr_hdr)
+
+   hdulist = fits.HDUList([primary, cube, ol, dl, pr])
+   result = TipTopResult(hdulist)
+
+   # Use the built-in plot method
+   fig, ax = result.plot()
+   plt.show()
 
 7. Save and reload configs
 ---------------------------
