@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-02-14T22:18:34.517306+00:00",
+  "timestamp": "2026-02-16T06:56:40.646370+00:00",
   "server_reachable": true,
   "summary": {
     "pass": 6,
@@ -12,11 +12,99 @@
       "status": "fail",
       "strehl": null,
       "fwhm": null,
-      "elapsed_seconds": 8.5,
-      "error": "TIPTOP did not return a FITS file. Server response (2 parts):\n  Part 0: Content-Type=application/json, Disposition=form-data; name=\"serviceResult\"\n  {\"admin\":{\"logUrl\":\"https://www.eso.org/p2services/any/tiptop/jobs/e355e24b-7d5c-4139-9a1e-5ca7fc6c68f9/logfile\",\"exitCode\":1},\"service\":{\"message\":\"Traceback (most recent call last):\\n  File \\\"/diska/tbierwirth/services/imsi/scripts/any_service.py\\\", line 16, in <module>\\n    overallSimulation('.', instrument, '.', instrument, doPlot=False, doConvo"
+      "elapsed_seconds": 8.4,
+      "error": "TIPTOP did not return a FITS file. Server response (2 parts):\n  Part 0: Content-Type=application/json, Disposition=form-data; name=\"serviceResult\"\n  {\"admin\":{\"logUrl\":\"https://www.eso.org/p2services/any/tiptop/jobs/9d8b997c-fe10-4a4e-8fbb-1e8d97056f5b/logfile\",\"exitCode\":1},\"service\":{\"message\":\"Traceback (most recent call last):\\n  File \\\"/diska/tbierwirth/services/imsi/scripts/any_service.py\\\", line 16, in <module>\\n    overallSimulation('.', instrument, '.', instrument, doPlot=False, doConvo"
     },
     {
-      "name": "ERIS",
+      "name": "HARMONI_SCAO",
+      "status": "fail",
+      "strehl": null,
+      "fwhm": null,
+      "elapsed_seconds": 8.1,
+      "error": "TIPTOP did not return a FITS file. Server response (2 parts):\n  Part 0: Content-Type=application/json, Disposition=form-data; name=\"serviceResult\"\n  {\"admin\":{\"logUrl\":\"https://www.eso.org/p2services/any/tiptop/jobs/0f780615-260a-4a3c-b087-43efa30c7484/logfile\",\"exitCode\":1},\"service\":{\"message\":\"Traceback (most recent call last):\\n  File \\\"/diska/tbierwirth/services/imsi/scripts/any_service.py\\\", line 16, in <module>\\n    overallSimulation('.', instrument, '.', instrument, doPlot=False, doConvo"
+    },
+    {
+      "name": "HarmoniLTAO_1",
+      "status": "fail",
+      "strehl": null,
+      "fwhm": null,
+      "elapsed_seconds": 8.1,
+      "error": "TIPTOP did not return a FITS file. Server response (2 parts):\n  Part 0: Content-Type=application/json, Disposition=form-data; name=\"serviceResult\"\n  {\"admin\":{\"logUrl\":\"https://www.eso.org/p2services/any/tiptop/jobs/8c32046f-d1de-49e6-b112-134f2e10943f/logfile\",\"exitCode\":1},\"service\":{\"message\":\"Traceback (most recent call last):\\n  File \\\"/diska/tbierwirth/services/imsi/scripts/any_service.py\\\", line 16, in <module>\\n    overallSimulation('.', instrument, '.', instrument, doPlot=False, doConvo"
+    },
+    {
+      "name": "HarmoniLTAO_2",
+      "status": "fail",
+      "strehl": null,
+      "fwhm": null,
+      "elapsed_seconds": 8.2,
+      "error": "TIPTOP did not return a FITS file. Server response (2 parts):\n  Part 0: Content-Type=application/json, Disposition=form-data; name=\"serviceResult\"\n  {\"admin\":{\"logUrl\":\"https://www.eso.org/p2services/any/tiptop/jobs/78a70a5d-38e0-4e35-a6e1-e87b54b8fe1d/logfile\",\"exitCode\":1},\"service\":{\"message\":\"Traceback (most recent call last):\\n  File \\\"/diska/tbierwirth/services/imsi/scripts/any_service.py\\\", line 16, in <module>\\n    overallSimulation('.', instrument, '.', instrument, doPlot=False, doConvo"
+    },
+    {
+      "name": "HarmoniLTAO_3",
+      "status": "fail",
+      "strehl": null,
+      "fwhm": null,
+      "elapsed_seconds": 8.0,
+      "error": "TIPTOP did not return a FITS file. Server response (2 parts):\n  Part 0: Content-Type=application/json, Disposition=form-data; name=\"serviceResult\"\n  {\"admin\":{\"logUrl\":\"https://www.eso.org/p2services/any/tiptop/jobs/63698b59-4aa2-46b5-a070-445c208cd775/logfile\",\"exitCode\":1},\"service\":{\"message\":\"Traceback (most recent call last):\\n  File \\\"/diska/tbierwirth/services/imsi/scripts/any_service.py\\\", line 16, in <module>\\n    overallSimulation('.', instrument, '.', instrument, doPlot=False, doConvo"
+    },
+    {
+      "name": "METIS",
+      "status": "fail",
+      "strehl": null,
+      "fwhm": null,
+      "elapsed_seconds": 7.8,
+      "error": "TIPTOP did not return a FITS file. Server response (2 parts):\n  Part 0: Content-Type=application/json, Disposition=form-data; name=\"serviceResult\"\n  {\"admin\":{\"logUrl\":\"https://www.eso.org/p2services/any/tiptop/jobs/c133116f-28f6-4cbe-b199-bbd5549ee3ad/logfile\",\"exitCode\":1},\"service\":{\"message\":\"Traceback (most recent call last):\\n  File \\\"/diska/tbierwirth/services/imsi/scripts/any_service.py\\\", line 16, in <module>\\n    overallSimulation('.', instrument, '.', instrument, doPlot=False, doConvo"
+    },
+    {
+      "name": "MICADO_SCAO",
+      "status": "fail",
+      "strehl": null,
+      "fwhm": null,
+      "elapsed_seconds": 8.1,
+      "error": "TIPTOP did not return a FITS file. Server response (2 parts):\n  Part 0: Content-Type=application/json, Disposition=form-data; name=\"serviceResult\"\n  {\"admin\":{\"logUrl\":\"https://www.eso.org/p2services/any/tiptop/jobs/d3f7b739-0341-4e7d-b71c-e71bb96c6d25/logfile\",\"exitCode\":1},\"service\":{\"message\":\"Traceback (most recent call last):\\n  File \\\"/diska/tbierwirth/services/imsi/scripts/any_service.py\\\", line 16, in <module>\\n    overallSimulation('.', instrument, '.', instrument, doPlot=False, doConvo"
+    },
+    {
+      "name": "MICADO_SCAO_less_layers",
+      "status": "fail",
+      "strehl": null,
+      "fwhm": null,
+      "elapsed_seconds": 8.4,
+      "error": "TIPTOP did not return a FITS file. Server response (2 parts):\n  Part 0: Content-Type=application/json, Disposition=form-data; name=\"serviceResult\"\n  {\"admin\":{\"logUrl\":\"https://www.eso.org/p2services/any/tiptop/jobs/57ef7570-3bea-49f7-bd95-5ecb62012fd2/logfile\",\"exitCode\":1},\"service\":{\"message\":\"Traceback (most recent call last):\\n  File \\\"/diska/tbierwirth/services/imsi/scripts/any_service.py\\\", line 16, in <module>\\n    overallSimulation('.', instrument, '.', instrument, doPlot=False, doConvo"
+    },
+    {
+      "name": "MORFEO",
+      "status": "fail",
+      "strehl": null,
+      "fwhm": null,
+      "elapsed_seconds": 7.9,
+      "error": "TIPTOP did not return a FITS file. Server response (2 parts):\n  Part 0: Content-Type=application/json, Disposition=form-data; name=\"serviceResult\"\n  {\"admin\":{\"logUrl\":\"https://www.eso.org/p2services/any/tiptop/jobs/1e3e4b8c-3aa6-4cb5-a3bc-55f61701fc5a/logfile\",\"exitCode\":1},\"service\":{\"message\":\"Traceback (most recent call last):\\n  File \\\"/diska/tbierwirth/services/imsi/scripts/any_service.py\\\", line 16, in <module>\\n    overallSimulation('.', instrument, '.', instrument, doPlot=False, doConvo"
+    },
+    {
+      "name": "MUSE_LTAO",
+      "status": "pass",
+      "strehl": [
+        0.00711
+      ],
+      "fwhm": [
+        72.202
+      ],
+      "elapsed_seconds": 10.1,
+      "error": null
+    },
+    {
+      "name": "SOUL",
+      "status": "pass",
+      "strehl": [
+        0.85242
+      ],
+      "fwhm": [
+        56.338
+      ],
+      "elapsed_seconds": 9.0,
+      "error": null
+    },
+    {
+      "name": "eris",
       "status": "pass",
       "strehl": [
         0.89112
@@ -24,11 +112,11 @@
       "fwhm": [
         44.116
       ],
-      "elapsed_seconds": 9.5,
+      "elapsed_seconds": 9.2,
       "error": null
     },
     {
-      "name": "ERIS_LGS",
+      "name": "eris_lgs",
       "status": "pass",
       "strehl": [
         0.57578
@@ -36,43 +124,11 @@
       "fwhm": [
         44.914
       ],
-      "elapsed_seconds": 10.1,
+      "elapsed_seconds": 9.6,
       "error": null
     },
     {
-      "name": "HARMONI_SCAO",
-      "status": "fail",
-      "strehl": null,
-      "fwhm": null,
-      "elapsed_seconds": 8.6,
-      "error": "TIPTOP did not return a FITS file. Server response (2 parts):\n  Part 0: Content-Type=application/json, Disposition=form-data; name=\"serviceResult\"\n  {\"admin\":{\"logUrl\":\"https://www.eso.org/p2services/any/tiptop/jobs/3f7137c5-53b6-45f3-b72c-3a63fdfbab8b/logfile\",\"exitCode\":1},\"service\":{\"message\":\"Traceback (most recent call last):\\n  File \\\"/diska/tbierwirth/services/imsi/scripts/any_service.py\\\", line 16, in <module>\\n    overallSimulation('.', instrument, '.', instrument, doPlot=False, doConvo"
-    },
-    {
-      "name": "HarmoniLTAO_1",
-      "status": "fail",
-      "strehl": null,
-      "fwhm": null,
-      "elapsed_seconds": 8.3,
-      "error": "TIPTOP did not return a FITS file. Server response (2 parts):\n  Part 0: Content-Type=application/json, Disposition=form-data; name=\"serviceResult\"\n  {\"admin\":{\"logUrl\":\"https://www.eso.org/p2services/any/tiptop/jobs/016790be-fafd-4bec-966f-723e642a12f8/logfile\",\"exitCode\":1},\"service\":{\"message\":\"Traceback (most recent call last):\\n  File \\\"/diska/tbierwirth/services/imsi/scripts/any_service.py\\\", line 16, in <module>\\n    overallSimulation('.', instrument, '.', instrument, doPlot=False, doConvo"
-    },
-    {
-      "name": "HarmoniLTAO_2",
-      "status": "fail",
-      "strehl": null,
-      "fwhm": null,
-      "elapsed_seconds": 8.3,
-      "error": "TIPTOP did not return a FITS file. Server response (2 parts):\n  Part 0: Content-Type=application/json, Disposition=form-data; name=\"serviceResult\"\n  {\"admin\":{\"logUrl\":\"https://www.eso.org/p2services/any/tiptop/jobs/31f16071-9f5b-48c9-94cf-4eb92cfc79cf/logfile\",\"exitCode\":1},\"service\":{\"message\":\"Traceback (most recent call last):\\n  File \\\"/diska/tbierwirth/services/imsi/scripts/any_service.py\\\", line 16, in <module>\\n    overallSimulation('.', instrument, '.', instrument, doPlot=False, doConvo"
-    },
-    {
-      "name": "HarmoniLTAO_3",
-      "status": "fail",
-      "strehl": null,
-      "fwhm": null,
-      "elapsed_seconds": 9.0,
-      "error": "TIPTOP did not return a FITS file. Server response (2 parts):\n  Part 0: Content-Type=application/json, Disposition=form-data; name=\"serviceResult\"\n  {\"admin\":{\"logUrl\":\"https://www.eso.org/p2services/any/tiptop/jobs/15bb74c1-ee9c-4774-8904-34d3895f4222/logfile\",\"exitCode\":1},\"service\":{\"message\":\"Traceback (most recent call last):\\n  File \\\"/diska/tbierwirth/services/imsi/scripts/any_service.py\\\", line 16, in <module>\\n    overallSimulation('.', instrument, '.', instrument, doPlot=False, doConvo"
-    },
-    {
-      "name": "MAVIS",
+      "name": "mavis",
       "status": "pass",
       "strehl": [
         0.06117,
@@ -96,67 +152,11 @@
         15.088,
         16.796
       ],
-      "elapsed_seconds": 13.2,
+      "elapsed_seconds": 12.6,
       "error": null
     },
     {
-      "name": "METIS",
-      "status": "fail",
-      "strehl": null,
-      "fwhm": null,
-      "elapsed_seconds": 8.5,
-      "error": "TIPTOP did not return a FITS file. Server response (2 parts):\n  Part 0: Content-Type=application/json, Disposition=form-data; name=\"serviceResult\"\n  {\"admin\":{\"logUrl\":\"https://www.eso.org/p2services/any/tiptop/jobs/8fe6407b-f98c-49c3-b185-b513d821da57/logfile\",\"exitCode\":1},\"service\":{\"message\":\"Traceback (most recent call last):\\n  File \\\"/diska/tbierwirth/services/imsi/scripts/any_service.py\\\", line 16, in <module>\\n    overallSimulation('.', instrument, '.', instrument, doPlot=False, doConvo"
-    },
-    {
-      "name": "MICADO_SCAO",
-      "status": "fail",
-      "strehl": null,
-      "fwhm": null,
-      "elapsed_seconds": 8.4,
-      "error": "TIPTOP did not return a FITS file. Server response (2 parts):\n  Part 0: Content-Type=application/json, Disposition=form-data; name=\"serviceResult\"\n  {\"admin\":{\"logUrl\":\"https://www.eso.org/p2services/any/tiptop/jobs/958238a3-dab9-435d-a471-261c1f3c53a3/logfile\",\"exitCode\":1},\"service\":{\"message\":\"Traceback (most recent call last):\\n  File \\\"/diska/tbierwirth/services/imsi/scripts/any_service.py\\\", line 16, in <module>\\n    overallSimulation('.', instrument, '.', instrument, doPlot=False, doConvo"
-    },
-    {
-      "name": "MICADO_SCAO_less_layers",
-      "status": "fail",
-      "strehl": null,
-      "fwhm": null,
-      "elapsed_seconds": 8.5,
-      "error": "TIPTOP did not return a FITS file. Server response (2 parts):\n  Part 0: Content-Type=application/json, Disposition=form-data; name=\"serviceResult\"\n  {\"admin\":{\"logUrl\":\"https://www.eso.org/p2services/any/tiptop/jobs/cf2e7893-2278-4f94-bce1-0b171ee5d413/logfile\",\"exitCode\":1},\"service\":{\"message\":\"Traceback (most recent call last):\\n  File \\\"/diska/tbierwirth/services/imsi/scripts/any_service.py\\\", line 16, in <module>\\n    overallSimulation('.', instrument, '.', instrument, doPlot=False, doConvo"
-    },
-    {
-      "name": "MORFEO",
-      "status": "fail",
-      "strehl": null,
-      "fwhm": null,
-      "elapsed_seconds": 8.4,
-      "error": "TIPTOP did not return a FITS file. Server response (2 parts):\n  Part 0: Content-Type=application/json, Disposition=form-data; name=\"serviceResult\"\n  {\"admin\":{\"logUrl\":\"https://www.eso.org/p2services/any/tiptop/jobs/d8d7c616-cf88-4e48-9949-fc772650d3e4/logfile\",\"exitCode\":1},\"service\":{\"message\":\"Traceback (most recent call last):\\n  File \\\"/diska/tbierwirth/services/imsi/scripts/any_service.py\\\", line 16, in <module>\\n    overallSimulation('.', instrument, '.', instrument, doPlot=False, doConvo"
-    },
-    {
-      "name": "MUSE_LTAO",
-      "status": "pass",
-      "strehl": [
-        0.00711
-      ],
-      "fwhm": [
-        72.202
-      ],
-      "elapsed_seconds": 10.4,
-      "error": null
-    },
-    {
-      "name": "SOUL",
-      "status": "pass",
-      "strehl": [
-        0.85242
-      ],
-      "fwhm": [
-        56.338
-      ],
-      "elapsed_seconds": 8.8,
-      "error": null
-    },
-    {
-      "name": "SPHERE",
+      "name": "sphere",
       "status": "pass",
       "strehl": [
         0.92105
@@ -164,7 +164,7 @@
       "fwhm": [
         43.691
       ],
-      "elapsed_seconds": 8.8,
+      "elapsed_seconds": 8.6,
       "error": null
     }
   ]
