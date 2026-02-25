@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
   "label": "HarmoniLTAO_2",
-  "message": "failing",
-  "color": "red"
+  "message": "passing",
+  "color": "brightgreen"
 }
