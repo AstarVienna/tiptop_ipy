@@ -84,7 +84,7 @@ def check_instruments(output_dir):
                 strehl = None
                 fwhm = None
                 error = str(exc)[:500]
-                print(f"FAIL ({elapsed:.1f}s): {error[:80]}")
+                print(f"FAIL ({elapsed:.1f}s): {error}")
 
             results.append({
                 "name": name,
