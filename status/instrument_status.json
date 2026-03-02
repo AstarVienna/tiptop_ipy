@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-02-25T16:22:26.813571+00:00",
+  "timestamp": "2026-03-02T06:49:00.499838+00:00",
   "server_reachable": true,
   "summary": {
     "pass": 13,
@@ -16,7 +16,7 @@
       "fwhm": [
         11.416
       ],
-      "elapsed_seconds": 10.3,
+      "elapsed_seconds": 10.4,
       "error": null
     },
     {
@@ -28,7 +28,7 @@
       "fwhm": [
         11.952
       ],
-      "elapsed_seconds": 10.2,
+      "elapsed_seconds": 9.9,
       "error": null
     },
     {
@@ -36,8 +36,8 @@
       "status": "fail",
       "strehl": null,
       "fwhm": null,
-      "elapsed_seconds": 10.8,
-      "error": "TIPTOP did not return a FITS file. Server response (2 parts):\n  Part 0: Content-Type=application/json, Disposition=form-data; name=\"serviceResult\"\n  {\"admin\":{\"logUrl\":\"https://www.eso.org/p2services/any/tiptop/jobs/11b31fa7-0fae-4333-a93e-64ff4ca4ec1f/logfile\",\"exitCode\":1},\"service\":{\"message\":\"Traceback (most recent call last):\\n  File \\\"/diska/tbierwirth/services/imsi/scripts/any_service.py\\\", line 16, in <module>\\n    overallSimulation('.', instrument, '.', instrument, doPlot=False, doConvo"
+      "elapsed_seconds": 12.7,
+      "error": "TIPTOP did not return a FITS file. Server response (2 parts):\n  Part 0: Content-Type=application/json, Disposition=form-data; name=\"serviceResult\"\n  {\"admin\":{\"logUrl\":\"https://www.eso.org/p2services/any/tiptop/jobs/e9b1d31c-06f3-4e10-9fc9-47de57ed3ac2/logfile\",\"exitCode\":1},\"service\":{\"message\":\"Traceback (most recent call last):\\n  File \\\"/diska/tbierwirth/services/imsi/scripts/any_service.py\\\", line 16, in <module>\\n    overallSimulation('.', instrument, '.', instrument, doPlot=False, doConvo"
     },
     {
       "name": "HarmoniLTAO_2",
@@ -48,7 +48,7 @@
       "fwhm": [
         11.993
       ],
-      "elapsed_seconds": 11.2,
+      "elapsed_seconds": 10.7,
       "error": null
     },
     {
@@ -60,7 +60,7 @@
       "fwhm": [
         17.089
       ],
-      "elapsed_seconds": 11.4,
+      "elapsed_seconds": 11.6,
       "error": null
     },
     {
@@ -72,7 +72,7 @@
       "fwhm": [
         20.432
       ],
-      "elapsed_seconds": 10.9,
+      "elapsed_seconds": 13.2,
       "error": null
     },
     {
@@ -84,7 +84,7 @@
       "fwhm": [
         13.166
       ],
-      "elapsed_seconds": 10.1,
+      "elapsed_seconds": 9.9,
       "error": null
     },
     {
@@ -96,7 +96,7 @@
       "fwhm": [
         12.294
       ],
-      "elapsed_seconds": 10.7,
+      "elapsed_seconds": 9.8,
       "error": null
     },
     {
@@ -150,7 +150,7 @@
         12.446,
         12.409
       ],
-      "elapsed_seconds": 17.3,
+      "elapsed_seconds": 17.0,
       "error": null
     },
     {
@@ -158,8 +158,8 @@
       "status": "fail",
       "strehl": null,
       "fwhm": null,
-      "elapsed_seconds": 8.5,
-      "error": "TIPTOP did not return a FITS file. Server response (2 parts):\n  Part 0: Content-Type=application/json, Disposition=form-data; name=\"serviceResult\"\n  {\"admin\":{\"logUrl\":\"https://www.eso.org/p2services/any/tiptop/jobs/0c2707c4-7a50-4d6a-8576-efbb221731bd/logfile\",\"exitCode\":1},\"service\":{\"message\":\"Traceback (most recent call last):\\n  File \\\"/diska/tbierwirth/services/imsi/scripts/any_service.py\\\", line 16, in <module>\\n    overallSimulation('.', instrument, '.', instrument, doPlot=False, doConvo"
+      "elapsed_seconds": 7.9,
+      "error": "TIPTOP did not return a FITS file. Server response (2 parts):\n  Part 0: Content-Type=application/json, Disposition=form-data; name=\"serviceResult\"\n  {\"admin\":{\"logUrl\":\"https://www.eso.org/p2services/any/tiptop/jobs/a616bbea-5703-4432-b2df-7eac1042032d/logfile\",\"exitCode\":1},\"service\":{\"message\":\"Traceback (most recent call last):\\n  File \\\"/diska/tbierwirth/services/imsi/scripts/any_service.py\\\", line 16, in <module>\\n    overallSimulation('.', instrument, '.', instrument, doPlot=False, doConvo"
     },
     {
       "name": "SOUL",
@@ -170,7 +170,7 @@
       "fwhm": [
         56.254
       ],
-      "elapsed_seconds": 9.5,
+      "elapsed_seconds": 8.9,
       "error": null
     },
     {
@@ -182,7 +182,7 @@
       "fwhm": [
         44.114
       ],
-      "elapsed_seconds": 9.3,
+      "elapsed_seconds": 8.8,
       "error": null
     },
     {
@@ -194,7 +194,7 @@
       "fwhm": [
         44.91
       ],
-      "elapsed_seconds": 10.0,
+      "elapsed_seconds": 9.8,
       "error": null
     },
     {
@@ -222,7 +222,7 @@
         15.104,
         17.04
       ],
-      "elapsed_seconds": 13.1,
+      "elapsed_seconds": 12.8,
       "error": null
     },
     {
@@ -234,7 +234,7 @@
       "fwhm": [
         43.679
       ],
-      "elapsed_seconds": 9.3,
+      "elapsed_seconds": 8.8,
       "error": null
     }
   ]
