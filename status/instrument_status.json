@@ -1,9 +1,9 @@
 {
-  "timestamp": "2026-03-02T06:49:00.499838+00:00",
+  "timestamp": "2026-03-03T16:26:50.917784+00:00",
   "server_reachable": true,
   "summary": {
-    "pass": 13,
-    "fail": 2,
+    "pass": 15,
+    "fail": 0,
     "server_down": 0
   },
   "instruments": [
@@ -16,7 +16,7 @@
       "fwhm": [
         11.416
       ],
-      "elapsed_seconds": 10.4,
+      "elapsed_seconds": 9.9,
       "error": null
     },
     {
@@ -28,16 +28,36 @@
       "fwhm": [
         11.952
       ],
-      "elapsed_seconds": 9.9,
+      "elapsed_seconds": 9.5,
       "error": null
     },
     {
       "name": "HarmoniLTAO_1",
-      "status": "fail",
-      "strehl": null,
-      "fwhm": null,
-      "elapsed_seconds": 12.7,
-      "error": "TIPTOP did not return a FITS file. Server response (2 parts):\n  Part 0: Content-Type=application/json, Disposition=form-data; name=\"serviceResult\"\n  {\"admin\":{\"logUrl\":\"https://www.eso.org/p2services/any/tiptop/jobs/e9b1d31c-06f3-4e10-9fc9-47de57ed3ac2/logfile\",\"exitCode\":1},\"service\":{\"message\":\"Traceback (most recent call last):\\n  File \\\"/diska/tbierwirth/services/imsi/scripts/any_service.py\\\", line 16, in <module>\\n    overallSimulation('.', instrument, '.', instrument, doPlot=False, doConvo"
+      "status": "pass",
+      "strehl": [
+        0.64674,
+        0.64598,
+        0.64444,
+        0.41474,
+        0.41266,
+        0.40987,
+        0.23931,
+        0.23621,
+        0.23294
+      ],
+      "fwhm": [
+        11.959,
+        11.957,
+        11.957,
+        12.003,
+        11.994,
+        11.982,
+        12.099,
+        12.078,
+        12.05
+      ],
+      "elapsed_seconds": 12.3,
+      "error": null
     },
     {
       "name": "HarmoniLTAO_2",
@@ -48,7 +68,7 @@
       "fwhm": [
         11.993
       ],
-      "elapsed_seconds": 10.7,
+      "elapsed_seconds": 10.6,
       "error": null
     },
     {
@@ -60,7 +80,7 @@
       "fwhm": [
         17.089
       ],
-      "elapsed_seconds": 11.6,
+      "elapsed_seconds": 11.1,
       "error": null
     },
     {
@@ -72,7 +92,7 @@
       "fwhm": [
         20.432
       ],
-      "elapsed_seconds": 13.2,
+      "elapsed_seconds": 10.6,
       "error": null
     },
     {
@@ -84,47 +104,47 @@
       "fwhm": [
         13.166
       ],
-      "elapsed_seconds": 9.9,
+      "elapsed_seconds": 9.6,
       "error": null
     },
     {
       "name": "MICADO_SCAO_less_layers",
       "status": "pass",
       "strehl": [
-        0.7551500201225281
+        0.75515
       ],
       "fwhm": [
         12.294
       ],
-      "elapsed_seconds": 9.8,
+      "elapsed_seconds": 10.1,
       "error": null
     },
     {
       "name": "MORFEO",
       "status": "pass",
       "strehl": [
-        0.6016700267791748,
-        0.6056600213050842,
-        0.6049799919128418,
-        0.6051099896430969,
-        0.5504000186920166,
-        0.5529199838638306,
-        0.5493800044059753,
-        0.4495300054550171,
-        0.4582200050354004,
-        0.4511699974536896,
-        0.3251500129699707,
-        0.3373599946498871,
-        0.3278999924659729,
-        0.2887299954891205,
-        0.30160000920295715,
-        0.2939800024032593,
-        0.2236499935388565,
-        0.23698000609874725,
-        0.23483000695705414,
-        0.17463000118732452,
-        0.18729999661445618,
-        0.1865600049495697
+        0.60166,
+        0.60566,
+        0.60498,
+        0.60511,
+        0.5504,
+        0.55291,
+        0.54938,
+        0.44953,
+        0.45822,
+        0.45117,
+        0.32515,
+        0.33735,
+        0.32789,
+        0.28873,
+        0.30159,
+        0.29396,
+        0.22365,
+        0.23697,
+        0.23481,
+        0.17462,
+        0.18728,
+        0.18653
       ],
       "fwhm": [
         12.224,
@@ -137,29 +157,33 @@
         12.251,
         12.211,
         12.23,
-        12.292,
+        12.293,
         12.234,
         12.25,
         12.334,
         12.259,
         12.264,
         12.427,
-        12.34,
+        12.341,
         12.322,
         12.545,
         12.446,
         12.409
       ],
-      "elapsed_seconds": 17.0,
+      "elapsed_seconds": 18.7,
       "error": null
     },
     {
       "name": "MUSE_LTAO",
-      "status": "fail",
-      "strehl": null,
-      "fwhm": null,
-      "elapsed_seconds": 7.9,
-      "error": "TIPTOP did not return a FITS file. Server response (2 parts):\n  Part 0: Content-Type=application/json, Disposition=form-data; name=\"serviceResult\"\n  {\"admin\":{\"logUrl\":\"https://www.eso.org/p2services/any/tiptop/jobs/a616bbea-5703-4432-b2df-7eac1042032d/logfile\",\"exitCode\":1},\"service\":{\"message\":\"Traceback (most recent call last):\\n  File \\\"/diska/tbierwirth/services/imsi/scripts/any_service.py\\\", line 16, in <module>\\n    overallSimulation('.', instrument, '.', instrument, doPlot=False, doConvo"
+      "status": "pass",
+      "strehl": [
+        0.00684
+      ],
+      "fwhm": [
+        72.55
+      ],
+      "elapsed_seconds": 10.0,
+      "error": null
     },
     {
       "name": "SOUL",
@@ -182,7 +206,7 @@
       "fwhm": [
         44.114
       ],
-      "elapsed_seconds": 8.8,
+      "elapsed_seconds": 8.7,
       "error": null
     },
     {
@@ -194,7 +218,7 @@
       "fwhm": [
         44.91
       ],
-      "elapsed_seconds": 9.8,
+      "elapsed_seconds": 9.9,
       "error": null
     },
     {
@@ -202,7 +226,7 @@
       "status": "pass",
       "strehl": [
         0.05399,
-        0.19811,
+        0.19812,
         0.05657,
         0.2194,
         0.21856,
@@ -219,10 +243,10 @@
         15.86,
         15.455,
         17.052,
-        15.104,
-        17.04
+        15.103,
+        17.039
       ],
-      "elapsed_seconds": 12.8,
+      "elapsed_seconds": 13.2,
       "error": null
     },
     {
@@ -234,7 +258,7 @@
       "fwhm": [
         43.679
       ],
-      "elapsed_seconds": 8.8,
+      "elapsed_seconds": 8.7,
       "error": null
     }
   ]
