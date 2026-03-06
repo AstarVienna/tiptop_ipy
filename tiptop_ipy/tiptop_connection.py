@@ -423,11 +423,13 @@ class TipTop:
         reachable : bool
         """
         import requests
+        server = utils.get_server()
+        if server == utils._ESO_URL:
+            url = server
+        else:
+            url = f"{server}/ping.php"
         try:
-            r = requests.get(
-                "https://www.eso.org/p2services/any/tiptop",
-                timeout=10,
-            )
+            r = requests.get(url, timeout=10)
             return r.status_code < 500
         except requests.RequestException:
             return False

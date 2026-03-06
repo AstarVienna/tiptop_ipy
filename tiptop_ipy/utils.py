@@ -1,5 +1,6 @@
 import os
 import os.path as p
+import time
 from tempfile import TemporaryFile
 
 import requests
@@ -13,6 +14,28 @@ from .ini_parser import parse_ini, write_ini
 with open(p.join(p.dirname(__file__), "defaults.yaml")) as f:
     DEFAULTS = f.read()
     DEFAULTS_YAML = yaml.full_load(DEFAULTS)
+
+_ESO_URL = "https://www.eso.org/p2services/any/tiptop"
+_server_url = os.environ.get("TIPTOP_SERVER_URL", _ESO_URL)
+
+
+def set_server(url):
+    """Set the TIPTOP server URL.
+
+    Parameters
+    ----------
+    url : str
+        Base URL of the TIPTOP API endpoint.
+        For ESO: "https://www.eso.org/p2services/any/tiptop"
+        For custom: "https://your-webspace.example.com/tiptop/api"
+    """
+    global _server_url
+    _server_url = url
+
+
+def get_server():
+    """Return the current TIPTOP server URL."""
+    return _server_url
 
 
 def list_instruments(include_path=False):
@@ -44,6 +67,9 @@ def list_instruments(include_path=False):
 def query_tiptop_server(ini_content, timeout=120):
     """Send an INI config to the TIPTOP server and return the FITS result.
 
+    Routes to ESO (synchronous) or custom server (async polling) based on
+    the current server URL set via ``set_server()`` or ``TIPTOP_SERVER_URL``.
+
     Parameters
     ----------
     ini_content : str
@@ -59,11 +85,17 @@ def query_tiptop_server(ini_content, timeout=120):
         - [1] ImageHDU: PSF cube(s)
         - [-1] ImageHDU: (2, N) cartesian coordinates of PSF positions
     """
+    if _server_url == _ESO_URL:
+        return _query_eso(ini_content, timeout)
+    return _query_custom(ini_content, timeout)
+
+
+def _query_eso(ini_content, timeout=120):
+    """Send config to the ESO TIPTOP endpoint (synchronous)."""
     with TemporaryFile() as ini_stream:
         ini_stream.write(ini_content.encode("ascii"))
         ini_stream.seek(0)
 
-        url = "https://www.eso.org/p2services/any/tiptop"
         desc_file = p.join(p.dirname(__file__), "instrument_templates",
                            "serviceDescription.json")
         with open(desc_file, "rb") as df:
@@ -71,7 +103,7 @@ def query_tiptop_server(ini_content, timeout=120):
                 "serviceDescription": (desc_file, df, "application/json"),
                 "parameterFile": ("tiptop_ipy.ini", ini_stream, "text/plain"),
             }
-            response = requests.post(url, files=files, timeout=timeout)
+            response = requests.post(_ESO_URL, files=files, timeout=timeout)
 
     if response.status_code != 200:
         raise ValueError(
@@ -79,6 +111,72 @@ def query_tiptop_server(ini_content, timeout=120):
             f"{response.text[:200]}"
         )
 
+    return _parse_multipart_fits(response)
+
+
+def _query_custom(ini_content, timeout=300):
+    """Send config to a custom TIPTOP server (async polling)."""
+    submit_url = f"{_server_url}/submit.php"
+
+    with TemporaryFile() as ini_stream:
+        ini_stream.write(ini_content.encode("ascii"))
+        ini_stream.seek(0)
+
+        desc_file = p.join(p.dirname(__file__), "instrument_templates",
+                           "serviceDescription.json")
+        with open(desc_file, "rb") as df:
+            files = {
+                "serviceDescription": (desc_file, df, "application/json"),
+                "parameterFile": ("tiptop_ipy.ini", ini_stream, "text/plain"),
+            }
+            response = requests.post(submit_url, files=files, timeout=60)
+
+    if response.status_code != 200:
+        raise ValueError(
+            f"TIPTOP server returned HTTP {response.status_code}: "
+            f"{response.text[:200]}"
+        )
+
+    # Cache hit: server returns multipart FITS directly
+    content_type = response.headers.get("Content-Type", "")
+    if "multipart" in content_type:
+        return _parse_multipart_fits(response)
+
+    # Cache miss: server returns JSON with job_id
+    data = response.json()
+    job_id = data["job_id"]
+
+    # Poll for completion
+    status_url = f"{_server_url}/status.php"
+    deadline = time.time() + timeout
+    poll_interval = 2
+
+    while time.time() < deadline:
+        time.sleep(poll_interval)
+        resp = requests.get(status_url, params={"job_id": job_id}, timeout=30)
+        resp.raise_for_status()
+        status = resp.json()
+
+        if status["status"] == "completed":
+            # Fetch result
+            result_url = f"{_server_url}/result.php"
+            result_resp = requests.get(
+                result_url, params={"job_id": job_id}, timeout=60
+            )
+            result_resp.raise_for_status()
+            return _parse_multipart_fits(result_resp)
+
+        if status["status"] == "failed":
+            msg = status.get("error_message", "Unknown server error")
+            raise ValueError(f"TIPTOP simulation failed: {msg}")
+
+    raise TimeoutError(
+        f"TIPTOP job {job_id} did not complete within {timeout}s"
+    )
+
+
+def _parse_multipart_fits(response):
+    """Parse a multipart response containing a FITS file."""
     payload = decoder.MultipartDecoder.from_response(response)
     if "cannot extract JSON structure from service output" in str(
         payload.parts[0].content
@@ -99,7 +197,6 @@ def query_tiptop_server(ini_content, timeout=120):
                 found_fits_file = True
 
         if not found_fits_file:
-            # Dump what the server actually sent back
             parts_summary = []
             max_msg_len = -1
             for i, part in enumerate(payload.parts):
