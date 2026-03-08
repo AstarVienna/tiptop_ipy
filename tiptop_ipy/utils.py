@@ -37,7 +37,6 @@ def set_server(name_or_url):
     Examples
     --------
     >>> set_server("univie")       # University of Vienna (default)
-    >>> set_server("eso")          # ESO microservice
     >>> set_server("http://...")    # Custom URL
     """
     global _server_url

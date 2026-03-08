@@ -29,6 +29,15 @@ Validation
 .. automodule:: tiptop_ipy.validation
    :members:
 
+Server Configuration
+--------------------
+
+.. autofunction:: tiptop_ipy.set_server
+
+.. autofunction:: tiptop_ipy.get_server
+
+.. autodata:: tiptop_ipy.SERVERS
+
 Utilities
 ---------
 

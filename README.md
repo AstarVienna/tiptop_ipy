@@ -1,8 +1,8 @@
 # TIPTOP-iPy
 
-A Python wrapper for the ESO TIPTOP adaptive optics PSF simulation microservice.
+A Python wrapper for the [TIPTOP](https://github.com/astro-tiptop/TIPTOP) adaptive optics PSF simulation service.
 
-    $ pip install git+https://github.com/astronomyk/tiptop_ipy.git
+    $ pip install git+https://github.com/AstarVienna/tiptop_ipy.git
 
 ## Basic Usage
 

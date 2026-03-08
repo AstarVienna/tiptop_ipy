@@ -135,7 +135,7 @@ Check for errors before sending to the server:
 
    result = tt.generate_psf()
 
-This sends the configuration to the ESO TIPTOP server and returns a
+This sends the configuration to the TIPTOP server and returns a
 :class:`~tiptop_ipy.TipTopResult` object. The call validates the configuration
 first and will raise ``ValueError`` if there are errors.
 
