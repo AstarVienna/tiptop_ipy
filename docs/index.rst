@@ -15,6 +15,7 @@ TIPTOP server, and work with the resulting PSFs, all from a notebook or script.
    tt = TipTop("MICADO_SCAO")
    tt["atmosphere", "Seeing"] = 0.6
    result = tt.generate_psf()
+   result.writeto("my_psf.fits", overwrite=True)
    result.plot()
 
 .. toctree::

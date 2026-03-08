@@ -16,15 +16,15 @@ import time
 from datetime import datetime, timezone
 
 
-def make_badge(label, status):
-    """Return a shields.io endpoint badge dict."""
+def make_badge(status):
+    """Return a shields.io endpoint badge dict (single-colour, no label)."""
     if status == "pass":
-        return {"schemaVersion": 1, "label": label,
+        return {"schemaVersion": 1, "label": "",
                 "message": "passing", "color": "brightgreen"}
     if status == "fail":
-        return {"schemaVersion": 1, "label": label,
+        return {"schemaVersion": 1, "label": "",
                 "message": "failing", "color": "red"}
-    return {"schemaVersion": 1, "label": label,
+    return {"schemaVersion": 1, "label": "",
             "message": "unknown", "color": "lightgrey"}
 
 
@@ -61,7 +61,7 @@ def check_instruments(output_dir):
                 "elapsed_seconds": 0,
                 "error": "Server unreachable",
             })
-            badge = make_badge(name, "server_down")
+            badge = make_badge("server_down")
             badge_path = os.path.join(output_dir, "badges", f"{name}.json")
             with open(badge_path, "w") as f:
                 json.dump(badge, f, indent=2)
@@ -96,7 +96,7 @@ def check_instruments(output_dir):
                 "error": error,
             })
 
-            badge = make_badge(name, status)
+            badge = make_badge(status)
             badge_path = os.path.join(output_dir, "badges", f"{name}.json")
             with open(badge_path, "w") as f:
                 json.dump(badge, f, indent=2)
