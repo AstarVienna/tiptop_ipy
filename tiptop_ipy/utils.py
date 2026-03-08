@@ -16,21 +16,32 @@ with open(p.join(p.dirname(__file__), "defaults.yaml")) as f:
     DEFAULTS_YAML = yaml.full_load(DEFAULTS)
 
 _ESO_URL = "https://www.eso.org/p2services/any/tiptop"
-_server_url = os.environ.get("TIPTOP_SERVER_URL", _ESO_URL)
+_UNIVIE_URL = "https://homepage.univie.ac.at/kieran.leschinski/tiptop/api"
+
+SERVERS = {
+    "eso": _ESO_URL,
+    "univie": _UNIVIE_URL,
+}
+
+_server_url = os.environ.get("TIPTOP_SERVER_URL", _UNIVIE_URL)
 
 
-def set_server(url):
-    """Set the TIPTOP server URL.
+def set_server(name_or_url):
+    """Set the TIPTOP server.
 
     Parameters
     ----------
-    url : str
-        Base URL of the TIPTOP API endpoint.
-        For ESO: "https://www.eso.org/p2services/any/tiptop"
-        For custom: "https://your-webspace.example.com/tiptop/api"
+    name_or_url : str
+        Either a server name ("eso", "univie") or a full URL.
+
+    Examples
+    --------
+    >>> set_server("univie")       # University of Vienna (default)
+    >>> set_server("eso")          # ESO microservice
+    >>> set_server("http://...")    # Custom URL
     """
     global _server_url
-    _server_url = url
+    _server_url = SERVERS.get(name_or_url.lower(), name_or_url)
 
 
 def get_server():
