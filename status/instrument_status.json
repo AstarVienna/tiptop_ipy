@@ -1,9 +1,9 @@
 {
-  "timestamp": "2026-03-03T16:26:50.917784+00:00",
+  "timestamp": "2026-03-08T21:14:30.668976+00:00",
   "server_reachable": true,
   "summary": {
-    "pass": 15,
-    "fail": 0,
+    "pass": 14,
+    "fail": 1,
     "server_down": 0
   },
   "instruments": [
@@ -16,7 +16,7 @@
       "fwhm": [
         11.416
       ],
-      "elapsed_seconds": 9.9,
+      "elapsed_seconds": 17.2,
       "error": null
     },
     {
@@ -28,7 +28,7 @@
       "fwhm": [
         11.952
       ],
-      "elapsed_seconds": 9.5,
+      "elapsed_seconds": 14.6,
       "error": null
     },
     {
@@ -56,7 +56,7 @@
         12.078,
         12.05
       ],
-      "elapsed_seconds": 12.3,
+      "elapsed_seconds": 26.7,
       "error": null
     },
     {
@@ -68,7 +68,7 @@
       "fwhm": [
         11.993
       ],
-      "elapsed_seconds": 10.6,
+      "elapsed_seconds": 20.3,
       "error": null
     },
     {
@@ -80,7 +80,7 @@
       "fwhm": [
         17.089
       ],
-      "elapsed_seconds": 11.1,
+      "elapsed_seconds": 15.3,
       "error": null
     },
     {
@@ -92,7 +92,7 @@
       "fwhm": [
         20.432
       ],
-      "elapsed_seconds": 10.6,
+      "elapsed_seconds": 21.1,
       "error": null
     },
     {
@@ -104,7 +104,7 @@
       "fwhm": [
         13.166
       ],
-      "elapsed_seconds": 9.6,
+      "elapsed_seconds": 11.9,
       "error": null
     },
     {
@@ -116,62 +116,16 @@
       "fwhm": [
         12.294
       ],
-      "elapsed_seconds": 10.1,
+      "elapsed_seconds": 13.3,
       "error": null
     },
     {
       "name": "MORFEO",
-      "status": "pass",
-      "strehl": [
-        0.60166,
-        0.60566,
-        0.60498,
-        0.60511,
-        0.5504,
-        0.55291,
-        0.54938,
-        0.44953,
-        0.45822,
-        0.45117,
-        0.32515,
-        0.33735,
-        0.32789,
-        0.28873,
-        0.30159,
-        0.29396,
-        0.22365,
-        0.23697,
-        0.23481,
-        0.17462,
-        0.18728,
-        0.18653
-      ],
-      "fwhm": [
-        12.224,
-        12.223,
-        12.222,
-        12.224,
-        12.239,
-        12.211,
-        12.225,
-        12.251,
-        12.211,
-        12.23,
-        12.293,
-        12.234,
-        12.25,
-        12.334,
-        12.259,
-        12.264,
-        12.427,
-        12.341,
-        12.322,
-        12.545,
-        12.446,
-        12.409
-      ],
-      "elapsed_seconds": 18.7,
-      "error": null
+      "status": "fail",
+      "strehl": null,
+      "fwhm": null,
+      "elapsed_seconds": 303.4,
+      "error": "TIPTOP job 21 did not complete within 300s"
     },
     {
       "name": "MUSE_LTAO",
@@ -182,7 +136,7 @@
       "fwhm": [
         72.55
       ],
-      "elapsed_seconds": 10.0,
+      "elapsed_seconds": 16.3,
       "error": null
     },
     {
@@ -194,7 +148,7 @@
       "fwhm": [
         56.254
       ],
-      "elapsed_seconds": 8.9,
+      "elapsed_seconds": 9.7,
       "error": null
     },
     {
@@ -218,7 +172,7 @@
       "fwhm": [
         44.91
       ],
-      "elapsed_seconds": 9.9,
+      "elapsed_seconds": 11.3,
       "error": null
     },
     {
@@ -226,7 +180,7 @@
       "status": "pass",
       "strehl": [
         0.05399,
-        0.19812,
+        0.19811,
         0.05657,
         0.2194,
         0.21856,
@@ -236,17 +190,17 @@
         0.05924
       ],
       "fwhm": [
-        16.049,
+        16.048,
         15.92,
-        16.033,
+        16.032,
         15.455,
         15.86,
         15.455,
-        17.052,
+        17.051,
         15.103,
         17.039
       ],
-      "elapsed_seconds": 13.2,
+      "elapsed_seconds": 27.2,
       "error": null
     },
     {
@@ -258,7 +212,7 @@
       "fwhm": [
         43.679
       ],
-      "elapsed_seconds": 8.7,
+      "elapsed_seconds": 7.9,
       "error": null
     }
   ]
