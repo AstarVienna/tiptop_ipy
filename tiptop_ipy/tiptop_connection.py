@@ -144,7 +144,8 @@ class TipTop:
 
     # --- Core methods ---
 
-    def generate_psf(self, timeout=120, force_simulation=False):
+    def generate_psf(self, timeout=120, force_simulation=False,
+                      save_psds=False):
         """Send config to TIPTOP server and return a TipTopResult.
 
         Validates config before sending and shows progress feedback.
@@ -155,6 +156,8 @@ class TipTop:
             Request timeout in seconds.
         force_simulation : bool
             If True, bypass the server cache and force a fresh simulation.
+        save_psds : bool
+            If True, include the high-order PSD in the output FITS file.
 
         Returns
         -------
@@ -172,6 +175,7 @@ class TipTop:
         hdulist = utils.query_tiptop_server(
             ini_string, timeout=timeout,
             force_simulation=force_simulation,
+            save_psds=save_psds,
         )
         return TipTopResult(hdulist)
 

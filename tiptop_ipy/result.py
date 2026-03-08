@@ -37,6 +37,7 @@ class TipTopResult:
         self._open_loop_index = None
         self._diffraction_index = None
         self._profile_index = None
+        self._psd_index = None
         self._detect_structure()
 
     def _detect_structure(self):
@@ -58,6 +59,8 @@ class TipTopResult:
                 self._open_loop_index = i
             elif "DIFFRACTION" in content:
                 self._diffraction_index = i
+            elif "PSD" in content:
+                self._psd_index = i
             elif "PROFILE" in content:
                 self._profile_index = i
             else:
@@ -107,6 +110,20 @@ class TipTopResult:
         if self._diffraction_index is None:
             raise ValueError("No diffraction-limited PSF found in FITS file")
         return self.hdulist[self._diffraction_index].data
+
+    @property
+    def has_psd(self):
+        """Whether the result contains a Power Spectral Density HDU."""
+        return self._psd_index is not None
+
+    @property
+    def psd(self):
+        """The high-order PSD, shape (nPointings, N, N), units nm²."""
+        if self._psd_index is None:
+            raise ValueError(
+                "No PSD data found. Re-run with save_psds=True."
+            )
+        return self.hdulist[self._psd_index].data
 
     @property
     def x(self):

@@ -74,7 +74,8 @@ def list_instruments(include_path=False):
     return [fname.replace(".ini", "") for fname in fnames]
 
 
-def query_tiptop_server(ini_content, timeout=120, force_simulation=False):
+def query_tiptop_server(ini_content, timeout=120, force_simulation=False,
+                        save_psds=False):
     """Send an INI config to the TIPTOP server and return the FITS result.
 
     Routes to ESO (synchronous) or custom server (async polling) based on
@@ -89,6 +90,9 @@ def query_tiptop_server(ini_content, timeout=120, force_simulation=False):
     force_simulation : bool
         If True, bypass the server cache and force a fresh simulation.
         Only supported on custom servers (not ESO).
+    save_psds : bool
+        If True, include the high-order PSD in the output FITS file.
+        Only supported on custom servers (not ESO).
 
     Returns
     -------
@@ -101,7 +105,8 @@ def query_tiptop_server(ini_content, timeout=120, force_simulation=False):
     if _server_url == _ESO_URL:
         return _query_eso(ini_content, timeout)
     return _query_custom(ini_content, timeout,
-                         force_simulation=force_simulation)
+                         force_simulation=force_simulation,
+                         save_psds=save_psds)
 
 
 def _query_eso(ini_content, timeout=120):
@@ -128,7 +133,8 @@ def _query_eso(ini_content, timeout=120):
     return _parse_multipart_fits(response)
 
 
-def _query_custom(ini_content, timeout=300, force_simulation=False):
+def _query_custom(ini_content, timeout=300, force_simulation=False,
+                  save_psds=False):
     """Send config to a custom TIPTOP server (async polling)."""
     submit_url = f"{_server_url}/submit.php"
 
@@ -146,6 +152,8 @@ def _query_custom(ini_content, timeout=300, force_simulation=False):
             data = {}
             if force_simulation:
                 data["force_simulation"] = "1"
+            if save_psds:
+                data["save_psds"] = "1"
             response = requests.post(submit_url, files=files, data=data,
                                      timeout=60)
 
