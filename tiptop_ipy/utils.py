@@ -74,7 +74,7 @@ def list_instruments(include_path=False):
     return [fname.replace(".ini", "") for fname in fnames]
 
 
-def query_tiptop_server(ini_content, timeout=120):
+def query_tiptop_server(ini_content, timeout=120, force_simulation=False):
     """Send an INI config to the TIPTOP server and return the FITS result.
 
     Routes to ESO (synchronous) or custom server (async polling) based on
@@ -86,6 +86,9 @@ def query_tiptop_server(ini_content, timeout=120):
         The raw contents of a TIPTOP config .ini file.
     timeout : int
         Request timeout in seconds.
+    force_simulation : bool
+        If True, bypass the server cache and force a fresh simulation.
+        Only supported on custom servers (not ESO).
 
     Returns
     -------
@@ -97,7 +100,8 @@ def query_tiptop_server(ini_content, timeout=120):
     """
     if _server_url == _ESO_URL:
         return _query_eso(ini_content, timeout)
-    return _query_custom(ini_content, timeout)
+    return _query_custom(ini_content, timeout,
+                         force_simulation=force_simulation)
 
 
 def _query_eso(ini_content, timeout=120):
@@ -124,7 +128,7 @@ def _query_eso(ini_content, timeout=120):
     return _parse_multipart_fits(response)
 
 
-def _query_custom(ini_content, timeout=300):
+def _query_custom(ini_content, timeout=300, force_simulation=False):
     """Send config to a custom TIPTOP server (async polling)."""
     submit_url = f"{_server_url}/submit.php"
 
@@ -139,7 +143,11 @@ def _query_custom(ini_content, timeout=300):
                 "serviceDescription": (desc_file, df, "application/json"),
                 "parameterFile": ("tiptop_ipy.ini", ini_stream, "text/plain"),
             }
-            response = requests.post(submit_url, files=files, timeout=60)
+            data = {}
+            if force_simulation:
+                data["force_simulation"] = "1"
+            response = requests.post(submit_url, files=files, data=data,
+                                     timeout=60)
 
     if response.status_code != 200:
         raise ValueError(

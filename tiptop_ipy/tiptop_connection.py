@@ -144,7 +144,7 @@ class TipTop:
 
     # --- Core methods ---
 
-    def generate_psf(self, timeout=120):
+    def generate_psf(self, timeout=120, force_simulation=False):
         """Send config to TIPTOP server and return a TipTopResult.
 
         Validates config before sending and shows progress feedback.
@@ -153,6 +153,8 @@ class TipTop:
         ----------
         timeout : int
             Request timeout in seconds.
+        force_simulation : bool
+            If True, bypass the server cache and force a fresh simulation.
 
         Returns
         -------
@@ -167,7 +169,10 @@ class TipTop:
             )
 
         ini_string = write_ini(self._config)
-        hdulist = utils.query_tiptop_server(ini_string, timeout=timeout)
+        hdulist = utils.query_tiptop_server(
+            ini_string, timeout=timeout,
+            force_simulation=force_simulation,
+        )
         return TipTopResult(hdulist)
 
     def validate(self):

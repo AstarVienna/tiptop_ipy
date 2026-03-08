@@ -71,7 +71,8 @@ def check_instruments(output_dir):
             t0 = time.time()
             try:
                 tt = TipTop(name)
-                result = tt.generate_psf(timeout=300)
+                result = tt.generate_psf(timeout=300,
+                                         force_simulation=True)
                 elapsed = time.time() - t0
                 strehl = result.strehl.tolist()
                 fwhm = result.fwhm.tolist()
