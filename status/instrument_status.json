@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-08T21:30:04.082310+00:00",
+  "timestamp": "2026-03-09T07:05:12.395739+00:00",
   "server_reachable": true,
   "summary": {
     "pass": 14,
@@ -16,7 +16,7 @@
       "fwhm": [
         11.416
       ],
-      "elapsed_seconds": 18.8,
+      "elapsed_seconds": 14.5,
       "error": null
     },
     {
@@ -28,7 +28,7 @@
       "fwhm": [
         11.952
       ],
-      "elapsed_seconds": 11.5,
+      "elapsed_seconds": 13.0,
       "error": null
     },
     {
@@ -56,7 +56,7 @@
         12.078,
         12.05
       ],
-      "elapsed_seconds": 16.2,
+      "elapsed_seconds": 26.4,
       "error": null
     },
     {
@@ -68,7 +68,7 @@
       "fwhm": [
         11.993
       ],
-      "elapsed_seconds": 12.4,
+      "elapsed_seconds": 15.1,
       "error": null
     },
     {
@@ -80,7 +80,7 @@
       "fwhm": [
         17.089
       ],
-      "elapsed_seconds": 12.4,
+      "elapsed_seconds": 15.6,
       "error": null
     },
     {
@@ -92,7 +92,7 @@
       "fwhm": [
         20.432
       ],
-      "elapsed_seconds": 15.1,
+      "elapsed_seconds": 20.7,
       "error": null
     },
     {
@@ -104,7 +104,7 @@
       "fwhm": [
         13.166
       ],
-      "elapsed_seconds": 7.6,
+      "elapsed_seconds": 12.6,
       "error": null
     },
     {
@@ -116,7 +116,7 @@
       "fwhm": [
         12.294
       ],
-      "elapsed_seconds": 9.9,
+      "elapsed_seconds": 11.4,
       "error": null
     },
     {
@@ -124,8 +124,8 @@
       "status": "fail",
       "strehl": null,
       "fwhm": null,
-      "elapsed_seconds": 602.8,
-      "error": "TIPTOP job 36 did not complete within 600s"
+      "elapsed_seconds": 602.4,
+      "error": "TIPTOP job 51 did not complete within 600s"
     },
     {
       "name": "MUSE_LTAO",
@@ -136,7 +136,7 @@
       "fwhm": [
         72.55
       ],
-      "elapsed_seconds": 11.0,
+      "elapsed_seconds": 10.5,
       "error": null
     },
     {
@@ -148,7 +148,7 @@
       "fwhm": [
         56.254
       ],
-      "elapsed_seconds": 5.3,
+      "elapsed_seconds": 8.6,
       "error": null
     },
     {
@@ -160,7 +160,7 @@
       "fwhm": [
         44.114
       ],
-      "elapsed_seconds": 4.3,
+      "elapsed_seconds": 7.1,
       "error": null
     },
     {
@@ -172,7 +172,7 @@
       "fwhm": [
         44.91
       ],
-      "elapsed_seconds": 9.6,
+      "elapsed_seconds": 6.1,
       "error": null
     },
     {
@@ -200,7 +200,7 @@
         15.103,
         17.039
       ],
-      "elapsed_seconds": 13.7,
+      "elapsed_seconds": 18.7,
       "error": null
     },
     {
@@ -212,7 +212,7 @@
       "fwhm": [
         43.679
       ],
-      "elapsed_seconds": 6.9,
+      "elapsed_seconds": 8.9,
       "error": null
     }
   ]
