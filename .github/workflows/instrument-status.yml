@@ -25,7 +25,7 @@ jobs:
       - name: Run instrument status checks
         id: check
         run: |
-          python tiptop_ipy/ci/check_server_status.py --output-dir status
+          python tiptop_ipy/ci/check_server_status.py --output-dir status --server https://tiptop.univie.ac.at/api
           echo "status_exit_code=$?" >> "$GITHUB_OUTPUT"
         continue-on-error: true
 

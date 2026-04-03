@@ -28,9 +28,13 @@ def make_badge(status):
             "message": "unknown", "color": "lightgrey"}
 
 
-def check_instruments(output_dir):
+def check_instruments(output_dir, server=None):
     """Run all instrument checks and write results."""
-    from tiptop_ipy import TipTop
+    from tiptop_ipy import TipTop, set_server
+
+    if server:
+        set_server(server)
+        print(f"Using server: {server}")
 
     os.makedirs(os.path.join(output_dir, "badges"), exist_ok=True)
 
@@ -134,8 +138,10 @@ def main():
         description="Check TIPTOP instrument status")
     parser.add_argument("--output-dir", default="status",
                         help="Directory for output files (default: status)")
+    parser.add_argument("--server", default=None,
+                        help="TIPTOP server URL (default: ESO endpoint)")
     args = parser.parse_args()
-    sys.exit(check_instruments(args.output_dir))
+    sys.exit(check_instruments(args.output_dir, server=args.server))
 
 
 if __name__ == "__main__":

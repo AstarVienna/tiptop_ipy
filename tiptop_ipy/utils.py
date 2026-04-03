@@ -16,7 +16,7 @@ with open(p.join(p.dirname(__file__), "defaults.yaml")) as f:
     DEFAULTS_YAML = yaml.full_load(DEFAULTS)
 
 _ESO_URL = "https://www.eso.org/p2services/any/tiptop"
-_UNIVIE_URL = "https://homepage.univie.ac.at/kieran.leschinski/tiptop/api"
+_UNIVIE_URL = "https://tiptop.univie.ac.at/api"
 
 SERVERS = {
     "eso": _ESO_URL,
@@ -173,28 +173,36 @@ def _query_custom(ini_content, timeout=300, force_simulation=False,
     job_id = data["job_id"]
 
     # Poll for completion
-    status_url = f"{_server_url}/status.php"
+    result_url = f"{_server_url}/result.php"
     deadline = time.time() + timeout
     poll_interval = 2
 
     while time.time() < deadline:
         time.sleep(poll_interval)
-        resp = requests.get(status_url, params={"job_id": job_id}, timeout=30)
-        resp.raise_for_status()
-        status = resp.json()
+        resp = requests.get(result_url, params={"job_id": job_id}, timeout=30)
 
-        if status["status"] == "completed":
-            # Fetch result
-            result_url = f"{_server_url}/result.php"
-            result_resp = requests.get(
-                result_url, params={"job_id": job_id}, timeout=60
-            )
-            result_resp.raise_for_status()
-            return _parse_multipart_fits(result_resp)
+        if resp.status_code == 200:
+            return _parse_multipart_fits(resp)
 
-        if status["status"] == "failed":
-            msg = status.get("error_message", "Unknown server error")
-            raise ValueError(f"TIPTOP simulation failed: {msg}")
+        if resp.status_code == 409:
+            status = resp.json()
+            error_msg = status.get("error_message")
+            if status["status"] == "failed":
+                raise ValueError(
+                    f"TIPTOP simulation failed: "
+                    f"{error_msg or 'Unknown server error'}"
+                )
+            # "retry" with an error message means the job is stuck failing
+            if status["status"] == "retry" and error_msg:
+                raise ValueError(
+                    f"TIPTOP job {job_id} failed (retrying): {error_msg}"
+                )
+            continue
+
+        raise ValueError(
+            f"TIPTOP result endpoint returned HTTP {resp.status_code}: "
+            f"{resp.text[:200]}"
+        )
 
     raise TimeoutError(
         f"TIPTOP job {job_id} did not complete within {timeout}s"
