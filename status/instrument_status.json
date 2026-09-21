@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-14T11:22:50.055461+00:00",
+  "timestamp": "2026-09-21T11:36:30.598517+00:00",
   "server_reachable": true,
   "summary": {
     "pass": 14,
@@ -16,7 +16,7 @@
       "fwhm": [
         11.416
       ],
-      "elapsed_seconds": 17.7,
+      "elapsed_seconds": 26.6,
       "error": null
     },
     {
@@ -28,7 +28,7 @@
       "fwhm": [
         11.952
       ],
-      "elapsed_seconds": 10.0,
+      "elapsed_seconds": 8.4,
       "error": null
     },
     {
@@ -56,7 +56,7 @@
         12.078,
         12.05
       ],
-      "elapsed_seconds": 30.9,
+      "elapsed_seconds": 35.3,
       "error": null
     },
     {
@@ -68,7 +68,7 @@
       "fwhm": [
         11.993
       ],
-      "elapsed_seconds": 15.0,
+      "elapsed_seconds": 21.0,
       "error": null
     },
     {
@@ -80,7 +80,7 @@
       "fwhm": [
         17.089
       ],
-      "elapsed_seconds": 9.8,
+      "elapsed_seconds": 10.6,
       "error": null
     },
     {
@@ -92,7 +92,7 @@
       "fwhm": [
         20.432
       ],
-      "elapsed_seconds": 14.8,
+      "elapsed_seconds": 21.2,
       "error": null
     },
     {
@@ -104,7 +104,7 @@
       "fwhm": [
         13.166
       ],
-      "elapsed_seconds": 7.6,
+      "elapsed_seconds": 7.9,
       "error": null
     },
     {
@@ -116,7 +116,7 @@
       "fwhm": [
         12.294
       ],
-      "elapsed_seconds": 9.9,
+      "elapsed_seconds": 8.3,
       "error": null
     },
     {
@@ -124,8 +124,8 @@
       "status": "fail",
       "strehl": null,
       "fwhm": null,
-      "elapsed_seconds": 87.5,
-      "error": "TIPTOP job 558 failed (retrying): only 0-dimensional arrays can be converted to Python scalars"
+      "elapsed_seconds": 85.5,
+      "error": "TIPTOP job 577 failed (retrying): only 0-dimensional arrays can be converted to Python scalars"
     },
     {
       "name": "MUSE_LTAO",
@@ -136,7 +136,7 @@
       "fwhm": [
         72.55
       ],
-      "elapsed_seconds": 12.4,
+      "elapsed_seconds": 13.0,
       "error": null
     },
     {
@@ -148,7 +148,7 @@
       "fwhm": [
         56.254
       ],
-      "elapsed_seconds": 6.1,
+      "elapsed_seconds": 3.9,
       "error": null
     },
     {
@@ -160,7 +160,7 @@
       "fwhm": [
         44.114
       ],
-      "elapsed_seconds": 6.5,
+      "elapsed_seconds": 6.4,
       "error": null
     },
     {
@@ -172,7 +172,7 @@
       "fwhm": [
         44.91
       ],
-      "elapsed_seconds": 8.6,
+      "elapsed_seconds": 12.0,
       "error": null
     },
     {
@@ -200,7 +200,7 @@
         15.103,
         17.039
       ],
-      "elapsed_seconds": 33.1,
+      "elapsed_seconds": 34.7,
       "error": null
     },
     {
@@ -212,7 +212,7 @@
       "fwhm": [
         43.679
       ],
-      "elapsed_seconds": 8.7,
+      "elapsed_seconds": 9.4,
       "error": null
     }
   ]
